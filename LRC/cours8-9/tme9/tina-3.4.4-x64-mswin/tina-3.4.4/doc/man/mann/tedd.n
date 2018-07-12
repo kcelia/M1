@@ -1,0 +1,184 @@
+.TH tedd n "Version 3.4.0" "Tina Tools"
+
+.SH NAME
+tedd - symbolic state space explorator and checker
+
+Part of Tina Toolbox for analysis of Petri nets and Time Petri nets.
+
+.SH SYNOPSIS
+
+.B tedd
+[\-\f2h\f1elp] [-p]
+     [-R | -F1]
+     [-f form | -dead] [-t s]
+     [-q | -k] [-NET | -NDR | -TPN | -PNML | -TTS]
+     [-inh] [-tc] [-pr] [-dt] [-stats]
+     [infile] [outfile] [digestfile] [errorfile]
+
+ 
+.SH DESCRIPTION
+
+tedd is a preliminary version of a tool for state space exploration of
+Petri nets and Time Petri nets relying on decision diagram based symbolic
+methods. Only a few options are currently supported; more will be added
+in the future. tedd also allows to check reachability properties on the fly.
+
+
+.SH OPTIONS
+
+.TP
+\-\f2h\f1elp Recalls options.
+
+.TP
+.B Operating mode options:
+
+.TP
+\-R
+Builds the set of reachable markings of a Petri net (untimed, or with
+temporal information discarded). The net is assumed bounded;
+time constraints, priorities and data are forgotten.
+
+.TP
+\-F1
+
+Builds the set of discrete time reachable states of a Time Petri net.
+If no temporal information is specified, or if all transitions bear interval
+[0,w[, then -F1  is silently replaced by -R. The net is assumed bounded;
+priorities and data are forgotten.
+
+
+.TP
+.B Exploration strategy flags:
+
+.TP
+\-inh
+Removes inhibitor arcs from the input net.
+
+.TP
+\-pr
+Removes priority constraints from the input net.
+
+.TP
+\-tc
+Removes time constraints  from the input net.
+
+.TP
+\-dt
+Forgets data processing when reading a tts description.
+
+.TP
+.B Stopping conditions:
+
+.TP
+\-t n
+Stop if exploration lasts longer than n seconds; no effects if n=0.
+
+.TP
+\-f form
+Stop if some state does not obey property form; no effects if form=T.
+Formula form is any modality-free formula accepted by the selt model
+checker (check man selt for details). In addition, an atomic proposition
+is provided, "safe" or "L.safe", that asserts that the marking of each place
+does not exceed 1.
+
+.TP
+\-dead
+Stop if some deadlock state is found; shorthand for -f "-L.dead".
+
+
+.TP
+.B Other flags:
+
+.TP
+\-p
+Disables state space generation, just parses input net.
+
+.TP
+\-stats
+Prints progress information on the fly (if available).
+
+.TP
+.B Input format and source:
+
+.TP
+\-NET | -NDR | -PNML | -TPN | -TTS
+Specifies the format of the input net. This flag is necessary when the
+input net is read on standard input, or read from a file that does not
+bear the expected extension. By default, the net is assumed in .net or
+.ndr format.
+
+.TP
+infile
+Where the  net is  read. The  input format is  determined by  the file
+type, according to the table below. If absent or specified by "-", the
+net is  read on standard  input in the  format specified by  the input
+flag. If  both an  infile and  some input flag  are present,  then the
+format defined  by the  input flag supersedes  that determined  by the
+infile extension.
+
+.nf
+file extension		input format
+--------------------------------------------------------------
+\&.net			net format
+\&.ndr			ndr format
+\&.tpn			tpn format
+\&.pnml			pnml format
+\&.tts			tts format
+.fi
+
+.TP
+.B Output format and destination:
+
+.TP
+\-q | \-v
+Specifies the verbosity of output.
+
+.TP
+outfile
+Where results are written.
+
+.TP
+.B Digest destination:
+
+.TP
+digestfile
+
+In addition to (possibly) its results in file outfile, tedd
+prints a summary of results in file digestfile (default stdout).
+
+.TP
+.B Errors destination:
+
+.TP
+errorfile
+Where error messages are written. By default, errors are printed on standard error.
+
+
+.TP
+.B Default options:
+
+Depend upon the features of the input net:
+.nf
+If no time constraint:     tedd -R -q
+Otherwise:                 tedd -F1 -q
+.fi
+
+
+.SH EXAMPLES
+
+.nf
+tedd -dead < abp.ndr
+tedd -PNML mynet.xml
+tedd -R ifip.ndr
+.fi
+
+
+.SH SEE ALSO
+
+nd(n), tina(n), plan(n), struct(n), ktzio(n), ndrio(n), selt(n), sift(n), muse(n), pathto(n), play(n), formats(n)
+
+.SH AUTHORS
+Bernard Berthomieu and Alexandre Hamez,
+LAAS/CNRS,  2000-2015,
+Bernard.Berthomieu@laas.fr.
+

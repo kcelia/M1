@@ -1,0 +1,3 @@
+https://msdn.microsoft.com/fr-fr/library/ms256086(v=vs.120).aspx
+
+http://jean-luc.massat.perso.luminy.univ-amu.fr/ens/xml/04-xpath.html

@@ -1,0 +1,25 @@
+-- MABD TP1 Prise en main de PL/SQL
+
+-- --------------------
+-- NOM KHERFALLAH
+-- Prenom CELIA
+-- -----------------------------------------------------
+
+-- procedure S1
+-- affiche le code source d'une méthode de l'utilisateur
+
+create or replace procedure s1(nom in varchar2) is
+
+
+-- cursor c is 
+
+
+begin
+   DBMS_OUTPUT.ENABLE (100000);
+
+
+   dbms_output.put_line('code source de la méthode ' || nom || ' : '); 
+
+end;
+
+-- exécuter s1, pour afficher par exemple le code source de la procedure L1

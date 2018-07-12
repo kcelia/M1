@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE restaurant SYSTEM "restaurant.dtd">
+
+
+
+<restaurant>
+	<nom>la tour d'argent</nom>
+	<fermture>dimanche et lundi</fermeture>
+	<ville>
+		<nom>paris</nom>
+		<departement>75</departement>
+		<monument>
+		<nom>Le Louvre</nom>
+		<tarif>8</tarif>
+		</monument>
+	</ville>
+	<etoile>2</etoile>
+	<menus>
+		<menu>
+			<nom>buffet</nom>
+			<prix>200</prix>
+		</menu>
+		<menu>
+			<nom>gourmet</nom>
+			<prix>300</prix>
+		</menu>
+	<menus>
+	
+</restaurant>

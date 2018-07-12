@@ -1,0 +1,125 @@
+
+
+@vider
+create type matiere as object(
+nom varchar2(10),
+prix number(30),
+masse number(30)
+);
+/
+create  type piece as object(
+nom varchar2(10),
+member function volume return number,
+member function masse return number,
+member function prix return number
+) not final;
+/
+create  type pieceDeBase under piece (
+mat ref matiere
+)not final;
+@compile
+@liste
+
+create type sphere under pieceDeBase(
+rayon number(30),
+overriding member function volume return number,
+overriding member function masse return number,
+overriding member function prix return number
+);
+/
+create type parall under pieceDeBase(
+longueur number(30),
+largeur number(30),
+hauteur number(30),
+overriding member function volume return number,
+overriding member function masse return number,
+overriding member function prix return number
+);
+/
+create type cylindre under piecedebase(
+hauteur number(30),
+rayon number(30),
+overriding member function volume return number,
+overriding member function masse return number,
+overriding member function prix return number
+);
+/
+create type quantiteDePiece as object (
+quantite number(20),
+p ref piece
+);
+/
+create type ensQuantiteDePiece as table of quantiteDePiece ;
+/
+create  type composite under piece (
+cout_assemblage number(38),
+ensp ensQuantiteDePiece
+);
+/
+---Table
+Create table lesmatieres of matiere;
+create table lespiecesdebase of piecedebase;
+create table lescomposites of composite
+nested table ensp store as t1;
+/
+@compile
+@liste
+
+
+--instance
+
+insert into lesmatieres values(matiere('bois',10,2));
+insert into lesmatieres values(matiere('fer',5,3));
+insert into lesmatieres values(matiere('ferrite',6,10));
+
+---
+
+insert into lespiecesdebase values(parall('plateau',
+					       (select ref(m)
+       	    		    		        from lesmatieres m
+					        where m.nom ='bois'),
+						1,100,80)
+);
+insert into lespiecesdebase values(sphere('boule',( select ref(m)
+       	    		    			    from lesmatieres m
+						    where m.nom='fer'),
+						    30)
+);
+insert into lespiecesdebase values(sphere('pied',(select ref(m)
+       	    		    		          from lesmatieres m
+						  where m.nom = 'bois'),
+						  30)					
+);
+insert into lespiecesdebase values(cylindre('canne',(select ref(m)
+       	    		    		             from lesmatieres m
+						     where m.nom = 'bois'),
+						     2, 30 )
+);
+insert into lespiecesdebase values(cylindre('clou',(select ref(m)
+       	    		    		             from lesmatieres m
+						     where m.nom = 'fer'),
+						    1, 20 )
+);						     
+insert into lespiecesdebase values(cylindre('aimant',(select ref(m)
+       	    		    		             from lesmatieres m
+						     where m.nom = 'ferrite'),
+						    2,5 )
+);						 
+insert into lescomposites values(composite('table',100,ensQuantiteDePiece( quantiteDePiece(4, (select ref(p) from lespiecesdebase p where p.nom = 'pied')),
+       	    		  						   quantiteDePiece(12, (select ref(p) from lespiecesdebase p where p.nom = 'clou')),
+									  quantiteDePiece (1, (select ref(p) from lespiecesdebase p where p.nom = 'plateau'))
+									   )
+	                                  )
+);
+insert into lescomposites values(composite('billard',10,ensQuantiteDePiece(quantiteDePiece(1, (select ref(ens) from lescomposites ens  where ens.nom = 'table')),
+								    quantiteDePiece(3, (select ref(p) from lespiecesdebase p where p.nom = 'boule')),
+       	    							    quantitedepiece(2, (select ref(p) from lespiecesdebase p where p.nom = 'cannes'))
+								    )
+				   )
+);
+
+-- Methode:
+
+--M1
+
+create or replace type

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- type de donnnee pour base2.xml   -->
+
+<!-- a completer ... -->
+
+<!ELEMENT base ((restaurant|ville)*)>
+<!ELEMENT restaurant (fermeture?, menu, menu+)>
+<!ELEMENT fermeture (#PCDATA)>
+<!ELEMENT menu EMPTY>
+<!ELEMENT ville (plusBeauMonument?)>
+<!ELEMENT plusBeauMonument EMPTY>
+<!ATTLIST restaurant nom CDATA #REQUIRED
+	  etoile (0|1|2|3) #REQUIRED
+	  ville IDREF #REQUIRED>
+<!ATTLIST menu nom CDATA #REQUIRED
+	  prix CDATA #REQUIRED>
+<!ATTLIST plusBeauMonument nom CDATA #REQUIRED
+	  tarif CDATA #REQUIRED>
+<!ATTLIST ville nom ID #REQUIRED
+	  departement CDATA #REQUIRED>
+
+
+<!--
+1. l'attribut étoile du restaurant tour d'argent vaut 4 au lieu d'être comprise entre 0 et 3.
+2.  tour d'argent n'a qu'un seul menu au lieu de 2 minimum.
+3. Paris n'a pas de département.
+4. Paris a 2 plusBeauMonument au lieu d'un.
+5. le monument le pont d'avignon n'a pas de tarif.
+6. Le restaurant MacDo se trouve à marseille mais marseille n'existe pas.-->

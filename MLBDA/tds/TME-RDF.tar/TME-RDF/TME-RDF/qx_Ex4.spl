@@ -1,0 +1,113 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX f: <http://www.cems.uwe.ac.uk/empdept/concept/>
+PREFIX : <http://www.abc.org/>
+ 
+SELECT * 
+WHERE {
+} 
+
+#1
+
+select ?n ?j
+{
+?n a f:emp .
+?n f:Job ?j
+}
+order by ?n 
+
+#2
+
+select ?n ?j
+{
+?n a f:emp .
+?n f:Job ?j
+}
+order by ?n 
+limit 3
+
+#3
+
+select ?n ?j
+{
+?n a f:emp .
+?n f:Job ?j .
+?n foaf:surname ?s .
+?n f:Sal ?l
+}
+order by desc(?l)
+limit 3
+
+#4
+
+
+select ?n ?j
+{
+?n a f:emp .
+MINUS
+{
+?n f:Job ?j.
+FILTER (?j="singer" || ?j="doctor")
+}
+}
+
+#5 prof a donné cette solution mais ne fonctionne pas
+
+select ?n 
+{
+?n a f:emp.
+FILTER regex(?n, "^l")
+}
+
+#6
+#sans order by et limit : (on fait tous les employés minus ensemble des employés pour lesquels il existe au moins un employé n2 ayant un salaire supérieur au sien)
+select distinct ?s1
+{
+?n1 f:Sal ?s1 .
+MINUS
+{
+?n1 f:Sal ?s1 .
+?n2 f:Sal ?s2 .
+FILTER (?n1 != ?n2 && ?s1<?s2)
+}
+}
+
+#avec order by et limit :
+select ?s
+{
+?n f:Sal ?s .
+}
+order by desc(?s)
+limit 1
+
+#7
+select ?n1 ?n2 ?s1
+{
+?n1 f:Sal ?s1 .
+?n2 f:Sal ?s2 .
+FILTER (str(?n1) < str(?n2) && ?s1=?s2)
+}
+
+#8
+select ?n1 ?n2 ?s1 ?s2 
+{
+?n1 f:Sal ?s1 .
+?n2 f:Sal ?s2 .
+FILTER  ((xsd:integer(?s1)-xsd:integer(?s2))>5)
+}
+
+#9
+
+select count(distinct ?d)
+{
+?n f:Dept ?d
+}
+
+#10
+
+select count(distinct ?n) ?d
+{
+?n f:Dept ?d
+}
+group by ?d

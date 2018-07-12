@@ -1,0 +1,8 @@
+net train
+tr App [0,w[ Far -> Close
+lb App App
+tr Exit [0,0] Left -> Far
+lb Exit Exit
+tr In [20,30] Close -> On
+tr Ex [30,50] On -> Left
+pl Far (1)

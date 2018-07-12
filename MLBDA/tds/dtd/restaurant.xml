@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE restaurant SYSTEM "restaurant.dtd">
+
+<restaurant>
+	<nom>restaurant_universitaire</nom>
+	<ville>
+		<nom>PARIS</nom>
+		<departement>PARIS</departement>
+		<monument>
+			<nom>Louvre</nom>
+			<tarif>8eur</tarif>
+		</monument>
+	</ville>
+	<fermeture>week-end</fermeture>
+	<etoile>0</etoile>
+	<menus>
+		<menu>
+			<nom>unique</nom>
+			<prix>2eur</prix>
+		</menu>
+	</menus>
+</restaurant>

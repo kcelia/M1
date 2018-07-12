@@ -1,0 +1,49 @@
+t 85.0 120.0 t1 sw 0 w n {} ne
+n 30.0 240.0 n18 1 {Stock du bois avant traitement}
+n 45.0 20.0 n17 1 {l'elfe est pret}
+p 125.0 65.0 p1 1 n
+p 345.0 75.0 p14 0 n
+p 335.0 200.0 p15 0 sw
+t 240.0 130.0 t8 sw 0 w n {} ne
+t 470.0 80.0 t2 e 0 w n {} ne
+p 595.0 80.0 p3 0 n
+p 760.0 165.0 p12 0 n
+t 685.0 205.0 t6 e 0 w n {} ne
+p 580.0 205.0 p4 0 n
+t 470.0 205.0 t3 sw 0 w n {} ne
+t 850.0 100.0 t7 se 0 w n {} ne
+p 995.0 100.0 p13 0 n
+n 1000.0 110.0 n8 1 {la voiture est prete}
+n 820.0 55.0 n14 1 {l 'elfe assemble}
+n 630.0 45.0 n11 1 {les roues sont fabriquées}
+n 750.0 205.0 n13 1 {la carrosserie est peinte}
+n 655.0 270.0 n12 1 {l elfe peint la carrosserie\\n}
+n 215.0 20.0 n21 1 {l'elfe prend le bois pour les roues}
+n 530.0 160.0 n15 1 {la sculpture est prete}
+n 255.0 165.0 n3 1 {l elfe prend le bois pour la casserie}
+n 395.0 260.0 n7 1 {l'elfe sculpte la carrosserie}
+n 425.0 50.0 n23 1 {l elfe fabrique les roues}
+p 130.0 205.0 p2 1 n
+t 1135.0 95.0 t10 0 w n
+n 1140.0 55.0 n24 0 {dbl click to edit}
+n 1140.0 55.0 n25 0 {dbl click to edit}
+n 1140.0 55.0 n26 1 {la voiture est stockée}
+n 20.0 185.0 n5 1 {le boit arrive}
+e p13 t10 1 n
+e p2 t8 1 n
+e p15 t3 1 n
+e p14 t2 1 n
+e t8 p15 1 n
+e t8 p14 1 n
+e p1 t8 1 n
+e t6 p12 1 n
+e p12 t7 1 n
+e t7 p13 1 n
+e p3 t7 1 n
+e p4 t6 1 n
+e t3 p4 1 n
+e t2 p3 1 n
+e t1 p2 1 n
+h elfev1
+
+

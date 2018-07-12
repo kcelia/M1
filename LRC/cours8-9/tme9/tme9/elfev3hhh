@@ -1,0 +1,44 @@
+p 170.0 75.0 p14 0 n
+p 160.0 200.0 p15 0 sw
+t 295.0 80.0 t2 e 0 w n {} ne
+p 420.0 80.0 p3 0 n
+p 585.0 165.0 p12 0 n
+t 510.0 205.0 t6 e 0 w n {} ne
+p 405.0 205.0 p4 0 n
+t 295.0 205.0 t3 sw 0 w n {} ne
+t 675.0 100.0 t7 se 0 w n {} ne
+n 645.0 55.0 n14 1 {l 'elfe prends la carrosserie et les roues}
+n 455.0 45.0 n11 1 {les roues sont fabriquées}
+n 575.0 205.0 n13 1 {la carrosserie est peinte}
+n 480.0 270.0 n12 1 {l elfe peint la carrosserie\\n}
+n 40.0 20.0 n21 1 {l'elfe prend le bois pour les roues}
+n 355.0 160.0 n15 1 {la sculpture est prete}
+n 80.0 165.0 n3 1 {l elfe prend le bois pour la casserie}
+n 220.0 260.0 n7 1 {l'elfe sculpte la carrosserie}
+n 250.0 50.0 n23 1 {l elfe fabrique les roues}
+p 765.0 105.0 p13 0 n
+t 880.0 125.0 t10 w 0 w n {} ne
+p 1010.0 120.0 p16 0 n
+n 885.0 95.0 n27 1 {l elfe assemble}
+n 990.0 165.0 n8 1 {la voiture est prete}
+p 30.0 120.0 p0 4 n
+t 100.0 95.0 t0 0 w n
+t 65.0 235.0 t1 s 0 w n {} ne
+e p0 t1 1 n
+e t1 p15 1 n
+e t0 p14 1 n
+e p0 t0 1 n
+e t10 p16 1 n
+e p13 t10 1 n
+e p15 t3 1 n
+e p14 t2 1 n
+e t6 p12 1 n
+e p12 t7 1 n
+e t7 p13 2 n
+e p3 t7 1 n
+e p4 t6 1 n
+e t3 p4 1 n
+e t2 p3 1 n
+h elfev3hhh
+
+

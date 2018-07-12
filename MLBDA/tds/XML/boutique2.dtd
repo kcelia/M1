@@ -1,0 +1,4 @@
+<!ELEMENT boutique (telephone*)>
+<!ELEMENT telephone (marque, modele)>
+<!ELEMENT marque (#PCDATA)>
+<!ELEMENT modele (#PCDATA)>

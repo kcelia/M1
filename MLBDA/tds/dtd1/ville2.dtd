@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- type de donnnee pour le guide touristique -->
+<!-- a completer ... -->
+
+<!ELEMENT ville (plusbeaumonument) >
+<!ATTLIST ville nom ID #REQUIRED
+	  departement CDATA #REQUIRED  >
+
+<!ELEMENT plusbeaumonument EMPTY >
+<!ATTLIST plusbeaumonument nom CDATA #REQUIRED
+	  tarif CDATA #REQUIRED  >

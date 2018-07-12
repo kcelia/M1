@@ -1,0 +1,14 @@
+net controleur
+tr A1 [0,w[ far*3 -> Coming in far*2
+lb A1 App
+tr E1 [0,0] in far*2 -> Leaving far*3
+lb E1 Exit
+tr A2 [0,w[ in far -> in*2
+lb A2 App
+tr E2 [0,0] in*2 -> far in
+lb E2 Exit
+tr D [0,0] Coming ->
+lb D Down
+tr U [0,0] Leaving ->
+lb U Up
+pl far (3)

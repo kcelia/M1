@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- type de donnnee pour le guide touristique -->
+<!-- a completer ... -->
+
+<!ELEMENT ville (nom, departement, plusBeauMonument)>
+<!ELEMENT plusBeauMonument (nom, tarif)>
+<!ELEMENT nom (#PCDATA)>
+<!ELEMENT departement (#PCDATA)>
+<!ELEMENT tarif (#PCDATA)>

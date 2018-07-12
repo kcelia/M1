@@ -1,0 +1,10 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX f: <http://www.cems.uwe.ac.uk/empdept/concept/>
+PREFIX xs: <http://www.w3.org/2001/XMLSchema#>
+ 
+SELECT DISTINCT ?dept (COUNT(?emp) AS ?COUNT) WHERE {
+  ?emp f:Dept ?dept.
+} GROUP BY ?dept
+ORDER BY ?COUNT

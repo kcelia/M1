@@ -1,0 +1,144 @@
+Exo1:
+
+-1) Le nom de la personne dont l'identifiant est “person0”.
+
+for $p in doc("xmark10MB.xml")//person[@id ="person0" ] 
+return $p/name
+or 
+let $p := doc("xmark10MB.xml")//person[@id ="person0" ] 
+return $p/name
+
+-2) La valeur initiale des trois premières enchères en cours.
+
+
+for $o in doc("xmark10MB.xml")//open_auctions/auction[position() <4]
+return <resulta id = "{$o/@id }" >  {$o/initial} </resulta >
+
+3-La valeur de la première et de la dernière augmentation effectuée sur les trois premières des 
+
+for $o in doc("xmark10MB.xml")//open_auctions/auction[position() <4]
+return <result id = "{$o/@id }" >
+
+<first>"{$o/bidder[position()=1]/increase/text()}" </first>
+<last>"{$o/bidder[last()]/increase/text()}"</last>
+</result>
+
+4-Le prix des objets vendu à plus de 480. 
+
+for $o in doc("xmark10MB.xml")//price[text()>480]
+return $o
+
+5-Le nom des objets du continent africain
+
+for $o in doc("xmark10MB.xml")//regions/africa
+return $o/item/name
+
+-6 Le nom des objets du continent africain avec leur prix de vente 
+
+for $o in doc("xmark10MB.xml")//regions/africa/item
+let $p := doc("xmark10MB.xml")//closed_auctions/auction[itemref/@item = $o/@id]
+return 
+<res>
+ {$o/name}
+ {$p//price}
+</res>
+ 
+// probleme on a des items sans prix 
+
+for $o in doc("xmark10MB.xml")//regions/africa/item
+let $p := doc("xmark10MB.xml")//closed_auctions/auction[itemref/@item = $o/@id]
+where count($p)>0
+return 
+<res>
+ {$o/name}
+ {$p//price}
+</res> 
+
+
+7- Le nombre de personnes qui n'ont pas de page web (i.e. les personnes sans élément homepage)
+
+let $o:= doc("xmark10MB.xml")//person/homepage 
+let $p := doc("xmark10MB.xml")//person
+return (count($p)) - (count($o))
+
+
+let $o:= doc("xmark10MB.xml")//person[ not( homepage )]
+return (count($o))
+
+
+EXO2)
+
+R7- 
+for $o in doc("bib.xml")//book[@year > 1991 and publisher[text()= "Addison-Wesley"]]
+order by $o/title ascending
+return $o/title
+
+
+
+
+
+SUITE------------------------
+
+1. afficher tous les tournois (lieu,année) triés par année, puis lieu. Utiliser la fonction 
+
+for $o in distinct-values(doc("rencontre.xml") // lieutournoi)
+for $p in distinct-values(doc("rencontre.xml")//rencontre[ lieutournoi = $o]//annee )
+order by $p , $o 
+return 
+<tournoi lieu = "{$o}"  annee = "{$p }" />
+
+
+2.pour chaque tournoi (lieu, année) donner les nom et prénom des participants qui sont dans le fichier gain.xml.
+
+annee = "{ancestor :: $o/annee }"
+
+
+
+for $i in doc("rencontre.xml")// rencontre 
+for $o in distinct-values(doc("rencontre.xml") // lieutournoi)
+
+
+return
+ 
+<tournoi lieu = "{$o}" annee = "{$i[lieutournoi = $o]/annee}"  >
+{
+for $p in distinct-values( doc("gain.xml")//gain[ lieutournoi = $o ]// nujoueur  )
+let  $jn := distinct-values(doc("joueur.xml")//joueur[nujoueur = $p]//nom)
+let  $jp :=  distinct-values(doc("joueur.xml")//joueur[nujoueur = $p]//prenom)
+
+return
+<participant nom =  "{$jn}" prenom = "{$jp}" />
+}
+</tournoi>
+ 
+
+
+
+pour chaque année, donner le nombre tournois auxquels chaque joueur a participé. pour chaque année, donner le nombre tournois auxquels chaque joueur a participé
+
+
+
+for $i in distinct-values(doc("rencontre.xml")// annee )
+
+
+
+order by $i
+return
+ 
+<annee valeur = "{$i}"  >
+{
+
+for $p in distinct-values( doc("gain.xml")//gain[ annee = $i ]// nujoueur  )
+let  $jn := distinct-values(doc("joueur.xml")//joueur[nujoueur = $p]//nom)
+
+
+return
+<joueur nom =  "{$jn}" tournois = "{count($jn)}" />
+}
+</annee>
+
+
+
+
+
+

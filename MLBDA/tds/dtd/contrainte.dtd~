@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- type de donnnee pour base2.xml   -->
+
+<!-- a completer ... -->
+
+<!ELEMENT base ((restaurant|ville)*)>
+<!ELEMENT restaurant (fermeture?, menu, menu+)>
+<!ELEMENT fermeture (#PCDATA)>
+<!ELEMENT menu EMPTY>
+<!ELEMENT ville (plusBeauMonument?)>
+<!ELEMENT plusBeauMonument EMPTY>
+<!ATTLIST restaurant nom CDATA #REQUIRED
+	  etoile (1|2|3) #REQUIRED
+	  ville IDREF #REQUIRED>
+<!ATTLIST menu nom CDATA #REQUIRED
+	  prix CDATA #REQUIRED>
+<!ATTLIST plusBeauMonument nom CDATA #REQUIRED
+	  tarif CDATA #REQUIRED>
+<!ATTLIST ville nom ID #REQUIRED
+	  departement CDATA #REQUIRED>
+
+

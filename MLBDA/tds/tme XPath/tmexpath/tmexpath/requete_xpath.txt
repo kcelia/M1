@@ -1,0 +1,121 @@
+Tous les titres de films. :
+//TITRE/text()
+/descendant-or-self::node()/child::TITRE/child::text()
+
+Les titres des films d'horreur.
+//FILM[ GENRE = 'Horreur']/TITRE/text()
+/descendant-or-self::node()/child::FILM[(child::GENRE = "Horreur")]/child::TITRE/child::text()
+
+ Le résumé d'Alien.
+//FILM[TITRE = 'Alien']/RESUME/text()
+/descendant-or-self::node()/child::FILM[(child::TITRE = "Alien")]/child::RESUME/child::text()
+
+Titre des films avec James Stewart.
+//FILM[ ROLES/ROLE/PRENOM = 'James' and ROLES/ROLE/NOM = 'Stewart' ] /TITRE/text()
+/descendant-or-self::node()/child::FILM[((child::ROLES/child::ROLE/child::PRENOM = "James") and (child::ROLES/child::ROLE/child::NOM = "Stewart"))]/child::TITRE/child::text()
+
+6- Titre des films avec James Stewart et Kim Novak.
+//FILM[ ROLES/ROLE[ PRENOM = 'James' and NOM = 'Stewart'] and ROLES/ROLE[PRENOM = 'Kim' and NOM = 'Novak']  ] /TITRE/text()
+/descendant-or-self::node()/child::FILM[(child::ROLES/child::ROLE[((child::PRENOM = "James") and (child::NOM = "Stewart"))] and child::ROLES/child::ROLE[((child::PRENOM = "Kim") and (child::NOM = "Novak"))])]/child::TITRE/child::text()
+
+7- Quels films n'ont pas de résumé ?
+
+//FILM[not(RESUME)]/TITRE/text()
+/descendant-or-self::node()/child::FILM[not(child::RESUME)]/child::TITRE/child::text()
+
+8- Quel est l'identifiant du metteur en scène du film Vertigo?
+//FILM[TITRE ='Vertigo']/MES/@idref
+/descendant-or-self::node()/child::FILM[(child::TITRE = "Vertigo")]/child::MES/attribute::idref
+
+9- Quel rôle joue Harvey Keitel dans le film Reservoir dogs ?
+//FILM[TITRE ='Reservoir dogs']/ROLES/ROLE[PRENOM ='Harvey' and NOM ='Keitel' ]  /INTITULE/text()
+
+10- Quel est le dernier film du document ?
+//FILM[last()]/TITRE/text()
+/descendant-or-self::node()/child::FILM[last()]/child::TITRE/child::text()
+
+11-Quel est le titre du film qui précède immédiatement le film Shining (dans l'ordre du document).
+//FILM[TITRE='Shining']/preceding-sibling::FILM[1]/TITRE/text()
+/descendant-or-self::node()/child::FILM[(child::TITRE = "Shining")]/preceding-sibling::FILM[1.0]/child::TITRE/child::text()
+
+12-Qui a mis en scène le film Eyes Wide Shut ?
+
+13-Donnez les titres des films qui contiennent un 'V' (utiliser la fonction contains)
+//FILM[contains(TITRE,'V')]/TITRE/text()
+/descendant-or-self::node()/child::FILM[contains(child::TITRE, "V")]/child::TITRE/child::text()
+
+14- Donner les noeuds qui ont exactement trois descendants (utiliser la fonction count).
+// * [count(descendant :: * ) = 3 ]
+remarque : * : je parcours tous les elements
+	   je compte les elements (n'importe les quels * ) qui ont exactement trois descendants
+
+ * [count( * ) = 3 ] 
+ 
+15-Donner les noeuds dont le nom contient la chaîne 'TU' (fonction name)
+
+// * [contains(name() ,'TU')]
+
+
+exo2:
+
+
+
+1.
+//pays[ frontière/@pays = 'p1']/@n
+/descendant-or-self::node()/child::pays[(child::frontière/attribute::pays = "p1")]/attribute::n
+
+2.
+//pays[ @continent = // continent[@nom = 'Europe'] /@n ] /nom/text()
+/descendant-or-self::node()/child::pays[(attribute::continent = /descendant-or-self::node()/child::continent[(attribute::nom = "Europe")]/attribute::n)]/child::nom/child::text()
+
+
+
+3.
+
+//pays[@population >= 10 and count(langue)>=2 ]/langue/text()
+4.
+//pays[ @continent = 'c1' and langue[@pourcentage >= 10 and @pourcentage <= 20] ]/nom/text()
+
+
+5.
+
+// pays[ @n = // montagne [@altitude >='4000' ]/ situation/@pays ] /nom/ text()
+/descendant-or-self::node()/child::pays[(attribute::n = /descendant-or-self::node()/child::montagne[(attribute::altitude >= "4000")]/child::situation/attribute::pays)]/child::nom/child::text()
+
+
+6.
+
+// montagne[situation/@pays = //pays[@continent = // continent[@nom= 'Europe']/@n] /@n]/@nom
+
+
+7.
+
+// pays [ not( @n = // mer/ situation/ @pays) ]/nom/ text()
+
+8.
+
+// pays [ frontière/@pays = 'p1' ]/ nom/ text()
+
+
+9.
+
+// montagne [ count( situation ) >= 2 and situation/@pays = // pays [@population >40] /@n ] /@nom / text()
+
+
+
+10.
+
+// continent[ count(@n = // pays/@continent) >= 30 ]/superficie/text()
+
+11.a.
+
+// pays [count( @n = // montagne/ situation / @pays  )=2 ]  / nom / text() =>France
+
+
+
+
+
+
+
+
+

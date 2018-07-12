@@ -1,0 +1,8 @@
+create type Piece as object (
+nom varchar2(30)
+) not final;
+create type Matiere as object (
+nom varchar2(30),
+prix number,
+masseVolumique number
+);

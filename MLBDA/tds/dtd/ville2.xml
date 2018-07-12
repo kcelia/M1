@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE ville SYSTEM "ville2.dtd">
+
+<!-- Ajouter les données suivantes :
+
+Le plus beau monument de Paris est le Louvre a 8 EUR.
+
+-->
+<ville nom="PARIS" departement="PARIS">
+	<plusBeauMonument nom="Louvre" tarif="8eur"></plusBeauMonument>
+</ville>
+

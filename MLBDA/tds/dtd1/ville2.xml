@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE ville SYSTEM "ville2.dtd">
+
+<!-- question b -->
+
+<!-- Ajouter les données suivantes :
+
+Le plus beau monument de Paris est le Louvre a 8 EUR.
+
+-->
+
+
+<ville nom = "paris " departement = "75" > 	
+	<plusbeaumonument nom = "Le Louvre" tarif = "8"></plusbeaumonument>
+	<!-- si le mets a la ligne et que plusbeaumonument est empty ca ne marche pas -->
+</ville>
+
+

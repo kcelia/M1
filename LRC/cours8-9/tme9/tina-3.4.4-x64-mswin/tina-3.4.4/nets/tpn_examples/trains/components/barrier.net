@@ -1,0 +1,10 @@
+net barriere
+tr D1 [0,0] Up -> lowering
+lb D1 Down
+tr D2 [0,0] raising -> lowering
+lb D2 Down
+tr L [5,10] lowering -> Down
+tr U [0,0] Down -> raising
+lb U Up
+tr R [5,10] raising -> Up
+pl Up (1)

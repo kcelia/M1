@@ -1,0 +1,18 @@
+p 135.0 115.0 p0 1 n
+p 40.0 105.0 p2 0 n
+t 35.0 25.0 t0 0 w n
+t 235.0 25.0 t1 0 w n
+t 25.0 190.0 t5 0 w n
+t 265.0 200.0 t6 0 w n
+p 265.0 105.0 p1 0 n
+e t6 p0 1 n
+e t5 p0 1 n
+e p1 t6 1 n
+e p2 t5 1 n
+e t1 p1 1 n
+e t0 p2 1 n
+e p0 t0 1 n
+e p0 t1 1 n
+h {exclusion mutuelle}
+
+

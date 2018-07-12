@@ -1,0 +1,52 @@
+
+
+# - code de 3trains:
+
+net train
+tr App [0,w[ Far -> Close
+lb App App
+tr Exit [0,0] Left -> Far
+lb Exit Exit
+tr In [20,30] Close -> On
+tr Ex [30,50] On -> Left
+pl Far (1)
+
+dup
+dup
+merge 3
+
+new
+net controleur
+tr A1 [0,w[ far*3 -> Coming in far*2
+lb A1 App
+tr E1 [0,0] in far*2 -> Leaving far*3
+lb E1 Exit
+tr A2 [0,w[ in far -> in*2
+lb A2 App
+tr E2 [0,0] in*2 -> far in
+lb E2 Exit
+tr D [0,0] Coming ->
+lb D Down
+tr U [0,0] Leaving ->
+lb U Up
+pl far (3)
+
+new
+net barriere
+tr D1 [0,0] Up -> lowering
+lb D1 Down
+tr D2 [0,0] raising -> lowering
+lb D2 Down
+tr L [5,10] lowering -> Down
+tr U [0,0] Down -> raising
+lb U Up
+tr R [5,10] raising -> Up
+pl Up (1)
+
+
+sync 3
+
+
+
+
+

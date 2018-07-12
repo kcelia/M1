@@ -1,0 +1,85 @@
+RdF standard du web sémantique 
+
+on interroge les données 
+on va anot" les ressource du web de facon a identifié les ressources de facon unique
+
+=>link data pour pouvoir les interoger plus facilement
+permetre une anotation ajouter de la semantique identifié de facon les identifiés d apres des ressources differentes 
+
+
+
+
+
+rdf decrit les donnes en mettant des annontations semantique
+rdfs decrit les shceme 
+sparql interrpgation des données rdf 
+
+rdf est un triplet :
+
+		prédicat
+sujet--------------------------------->objet 
+
+ex picasso a peint guernica
+
+		peint
+picasso------------------------------>guernica 
+
+
+les ressources et les predicats sont des URI( identifié de facon unique les ressources du web)
+
+sujet / predicat / object = > URI, mais les objects peuvent etre des valeurs listes ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+expression turtule s p o.
+sujet predicat object.
+
+
+Uri noeud blanc, uri, uri noeud blanc literal ( valeur )
+noeud ressource sans identificateur, c des des environmenet restreint 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

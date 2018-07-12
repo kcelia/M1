@@ -1,0 +1,46 @@
+p 270.0 170.0 p3 0 n
+p 385.0 305.0 p4 0 n
+t 385.0 175.0 t1 0 w n
+p 700.0 405.0 p8 0 n
+t 575.0 165.0 t4 0 w n
+p 485.0 50.0 p5 1 n
+p 1080.0 65.0 p10 1 n
+p 710.0 165.0 p6 0 n
+p 575.0 290.0 p7 0 n
+t 575.0 405.0 t7 0 w n
+t 910.0 405.0 t6 0 w n
+p 905.0 285.0 p9 0 n
+t 900.0 165.0 t5 0 w n
+t 390.0 425.0 t2 0 w n
+p 275.0 425.0 p2 0 n
+t 145.0 430.0 t3 0 w n
+p 145.0 310.0 p1 0 n
+t 150.0 175.0 t0 0 w n
+p 30.0 60.0 p0 1 n
+e t7 p5 1 n
+e t2 p5 1 n
+e p5 t4 1 n
+e p9 t6 1 n
+e t5 p9 1 n
+e t5 p6 1 n
+e p10 t5 1 n
+e t6 p10 1 n
+e p8 t6 1 n
+e t7 p8 1 n
+e p7 t7 1 n
+e t4 p7 1 n
+e p6 t4 1 n
+e p5 t1 1 n
+e p1 t3 1 n
+e t0 p3 1 n
+e t0 p1 1 n
+e t3 p0 1 n
+e p2 t3 1 n
+e t2 p2 1 n
+e p4 t2 1 n
+e t1 p4 1 n
+e p3 t1 1 n
+e p0 t0 1 n
+h exemple_cous2
+
+

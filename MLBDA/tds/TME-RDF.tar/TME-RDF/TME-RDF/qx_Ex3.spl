@@ -1,0 +1,137 @@
+base <http://example.org>
+prefix foaf: <http://xmlns.com/foaf/0.1/> 
+prefix rel: <http://www.perceive.net/schemas/relationship/> 
+prefix : <http://example.org/> 
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+prefix univ: <http://www.faculty.ac> 
+
+
+
+SELECT *
+WHERE
+{
+}
+
+
+#1
+select distinct ?s
+{ ?s ?p ?o }
+
+#2
+select distinct ?p
+{ ?s ?p ?o }
+
+#4
+select distinct ?e
+{ ?e :studiedAt ?u . 
+?p :studiedAt ?u .
+{
+{?e :hasMother ?p }
+UNION
+{?e :hasFather ?p }
+}
+
+}
+
+#5
+select distinct ?e
+{ ?e :studiedAt ?u . 
+?m :studiedAt ?u .
+?f :studiedAt ?u .
+?e :hasMother ?m .
+?e :hasFather ?f 
+}
+
+#6
+select distinct ?e
+{ 
+?e :studiedAt ?u . 
+
+minus
+
+{
+?e :studiedAt ?u . 
+?p :studiedAt ?u .
+{
+{?e :hasMother ?p }
+UNION
+{?e :hasFather ?p }
+}
+}
+}
+
+#7
+select distinct ?e
+{
+?e :studiedAt ?u .
+?p :studiedAt ?u .
+{
+{
+?e :hasBrother ?p 
+}
+UNION
+{
+?e :hasSister ?p
+}
+}
+}
+
+#8
+
+select ?e
+{
+?e :studiedAt ?u .
+
+minus
+{
+
+?e :livesIn ?l .
+?u :locatedAt ?l 
+}
+
+}
+
+#9
+select distinct ?a
+{
+#
+{
+{
+:liz :friend ?b
+}
+UNION
+{
+?b :friend :liz
+}
+}
+#
+.
+#
+{
+{
+?a :friend ?b
+}
+UNION
+{
+?b :friend ?a
+}
+}
+#
+.
+#
+MINUS
+{
+{
+:liz :friend ?a
+}
+UNION
+{
+?a :friend :liz
+}
+}
+#
+FILTER (?a != :liz)
+}
+
+#10
+

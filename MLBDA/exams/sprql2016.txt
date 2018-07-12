@@ -1,0 +1,203 @@
+
+
+
+1.1)
+
+compter tous les tuples 
+
+:glycemie 
+	a      :examen_medical ;     
+	:nom   "allergen ;
+	:seuil "8".
+est equivalent à :
+:glycemie  a       :examen_medical .   
+:glycemie  :nom    "allergen .
+:glycemie  :seuil  "8".   ( nb_triples =3 )
+
+
+:alg   :quoi    :allergie;
+       :parQui  :jade. 
+est quivalent à :
+:alg : quoi    :allergie. 
+:alg : parQui  :jade.  ( nb_triples += 2 )
+
+:ben :passe :glc , :plq . 
+est equivalent à :
+:ben :passe :glc . 
+:ben :passe :plq . ( nb_triples += 2 )
+
+np_triples = 9 + 6 + 4 +1 + 3+ 2 + 4 +4 = 33  
+
+1.2)
+on recherche les tuples  ?s ?p ?o avev ?p distincts 
+
+nb_pred = 10
+(a
+:nom
+:seuil
+:age 
+:grade
+:passe
+:quoi
+:quand
+:parqui
+:resultat)
+
+
+1.3) 
+rdf:type est une abréviation de a 
+nb_smth = 3 + 2 + 2 = 7 
+
+
+Question 2. Que retourne la requête Q4 donnée ci-dessous ? 
+Exprimez-la en français et donnez son résultat dans un tableau. 
+
+
+
+?pat :passe ?ex. retroune 
+____________________
+?pat  |:passe | ?ex.
+____________________
+:smith :passe :alg.
+:ben   :passe :alg.
+:ben   :passe :glc.
+
+?ex  :quoi :glycemie. retourne 
+____________________________
+?ex    |:quoi |    :glycemie 
+____________________________
+:glc   |:quoi |     glycemie
+
+?pat :passe ?ex. ?ex  :quoi :glycemie.
+____________________________________________
+?pat  |:passe | ?ex. | :quoi  | :glycemie 
+____________________________________________
+:ben  |:passe | :glc.| :quoi  | :glycemie 
+
+
+?ex  :resultat ?res.  retourne  :glc  :resultat  "6"
+:glycemie :seuil ?se. retourne  :glycemie :seuil  "8"
+:glycemie :nom ?nom.  retourne  :glycemie :nom "glycemie"
+
+?pat :passe ?ex. ?ex  :quoi :glycemie.?ex :resultat ?res.:glycemie :seuil ?se.:glycemie :nom ?nom.
+filtre : 6 < 8
+________________________________________________________________________
+?pat  |:passe | ?ex. | :quoi  | :glycemie | :resulat | :seuil | :nom   
+________________________________________________________________________
+:ben  |:passe | :glc.| :quoi  | :glycemie |  "6"     | "8"    | "glycemie
+    
+
+requete en français :
+les patients qui ont un taux de glycemie inferieur au seuil normal.
+
+
+ Question 3.
+Y a-t-il des patients qui sont également praticiens ? 
+Le résultat de la requête est : false
+
+ASK { ?p :patient . ?p :praticien filter ( bound(?p) ) } 
+
+
+Q4. 
+Les praticiens qui ont fait passer un examen
+ dont le seuil est strictement inférieur  à 12. Retourner le nom du praticien et 
+le nom de l’examen Le résultat de la requête est :  .
+
+
+select   ?praticien ?examen
+{
+?praticien a         :praticien.
+?patient   a         :patient.
+?patient   :passe    ?examen.
+?examen    :parqui   ?praticien.
+?examen    :resultat ?res.
+FILTRER( bound(?res) && ?res   < 12 )
+}
+
+Q5.
+Les patients qui ont passé un examen dont on connaît éventuellement le résultat.
+
+Select ?patient ?examen ?resultat 
+{
+?patient   a         :patient.
+?patient   :passe    ?examen.
+OPTIONAL {?examen    :resultat ?res }
+}
+
+
+Question 6.  
+Les praticiens qui ont effectué un examen à deux patients différents. 
+
+select   ?pr ?p1 ?p2
+{
+?pr a         :praticien.
+?p1   a         :patient.
+?p2  a         :patient.
+?p1   :passe    ?examen1.
+?p2   :passe    ?examen2.
+
+?examen1    :parqui   ?pr.
+?examen2    :parqui   ?pr.
+
+FILTRER( ?p1 != ?p2 && str(p1) < str(p2) ) 
+}
+
+
+EXO XPATH
+
+Question 1. Les appareils différents de 'Nikon F1'  
+qui ont été utilisés pour prendre les photos de la collection "Pour les copains". 
+
+
+// photo[appareil != "Nikon F" and @idP =// collection[nom = "Pour les copains" ]/publication/@idP ]/appareil/
+
+
+Question 2(1pt).  Les emails des personnes 
+qui n'ont pas de collections avec des photos en format 'gif'
+// utilisateur[@idU = //collection[publication/@idP = //photo[not(contains(format,"gif") )]/@idP]/@idU]/email
+ou
+//utilisateur[@idU = //collection[not(publication[@idP = //photo[format = "gif"]/@idP])]/@idU]/email
+
+Question 3.  La catégorie de la troisième photo publiée (troisième <publication>). 
+//photo[@idP = //publication[3]/@idP ]/categorie  marche pas 
+//photo[@idP = (//publication/@idP)[3]]/categorie
+
+
+Question 4.  
+Décrire en français le résultat qui sera envoyé par la requête suivante. Donner également son résultat. 
+
+//collection[publication/@date != publication/@date]/nom
+
+je dirais : idC = 'c67' 
+les collections qui comportents des publications partagaient a des dates differentes
+Resultat : <nom> Pour les compains</nom>
+
+Question 5(1 pt). La liste de tous les formats de photo possibles, chaque format doit être listé une seule fois
+
+//format[not( preceding::format = .)]
+//format[not(text() = ../following-sibling::photo/format)]
+
+Xquery 
+
+Q6)
+
+<resultat>
+{
+for $a in doc(..)//collection/publication  <!-- pour avoir toutes les publications-->
+order by $a
+
+return {
+	for $id in distinct-values (doc(..)//collection/publication/@idP)
+	for $nom in distinct-values(doc(..)//appareil[@idP = $id]/nom) <!-- on recupere le nom de chaq idP -->
+	let $x := count($a[@idP = $id ] <!-- compte le nombre de publication prise par les appareils -->
+	return 
+		if $x > 1 then < appareil nom = "{$x}" /> // si l'appareil a efectué plus d'une photo on l'affiche
+		else ()
+
+	}
+</resultat<
+			
+
+
+
+}

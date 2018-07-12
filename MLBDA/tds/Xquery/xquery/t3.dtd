@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!ELEMENT resultat (tournoi*)>
+
+<!ELEMENT tournoi (match*)>
+<!ATTLIST tournoi annee CDATA #REQUIRED
+                  lieu  CDATA #REQUIRED>
+
+<!ELEMENT match (match*)>
+<!ATTLIST match gagnant CDATA #REQUIRED
+                perdant CDATA #REQUIRED>

@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<title>SWI-Prolog 7.6.2 Reference Manual: Section 6.5</title><link rel="home" href="index.html">
+<link rel="contents" href="Contents.html">
+<link rel="index" href="DocIndex.html">
+<link rel="summary" href="summary.html">
+<link rel="previous" href="metapred.html">
+<link rel="next" href="mtoplevel.html">
+
+<style type="text/css">
+
+/* Style sheet for SWI-Prolog latex2html
+*/
+
+dd.defbody
+{ margin-bottom: 1em;
+}
+
+dt.pubdef
+{ background-color: #c5e1ff;
+}
+
+dt.multidef
+{ background-color: #c8ffc7;
+}
+
+.bib dd
+{ margin-bottom: 1em;
+}
+
+.bib dt
+{ float: left;
+margin-right: 1.3ex;
+}
+
+pre.code
+{ margin-left: 1.5em;
+margin-right: 1.5em;
+border: 1px dotted;
+padding-top: 5px;
+padding-left: 5px;
+padding-bottom: 5px;
+background-color: #f8f8f8;
+}
+
+div.navigate
+{ text-align: center;
+background-color: #f0f0f0;
+border: 1px dotted;
+padding: 5px;
+}
+
+div.title
+{ text-align: center;
+padding-bottom: 1em;
+font-size: 200%;
+font-weight: bold;
+}
+
+div.author
+{ text-align: center;
+font-style: italic;
+}
+
+div.abstract
+{ margin-top: 2em;
+background-color: #f0f0f0;
+border: 1px dotted;
+padding: 5px;
+margin-left: 10%; margin-right:10%;
+}
+
+div.abstract-title
+{ text-align: center;
+padding: 5px;
+font-size: 120%;
+font-weight: bold;
+}
+
+div.toc-h1
+{ font-size: 200%;
+font-weight: bold;
+}
+
+div.toc-h2
+{ font-size: 120%;
+font-weight: bold;
+margin-left: 2em;
+}
+
+div.toc-h3
+{ font-size: 100%;
+font-weight: bold;
+margin-left: 4em;
+}
+
+div.toc-h4
+{ font-size: 100%;
+margin-left: 6em;
+}
+
+span.sec-nr
+{
+}
+
+span.sec-title
+{
+}
+
+span.pred-ext
+{ font-weight: bold;
+}
+
+span.pred-tag
+{ float: right;
+padding-top: 0.2em;
+font-size: 80%;
+font-style: italic;
+color: #202020;
+}
+
+div.caption
+{ width: 80%;
+margin: auto;
+text-align:center;
+}
+
+/* Footnotes */
+
+sup.fn { color: blue; text-decoration: underline; }
+span.fn-text { display: none; }
+sup.fn span {display: none;}
+sup:hover span
+{ display: block !important;
+position: absolute; top: auto; left: auto; width: 80%;
+color: #000; background: white;
+border: 2px solid;
+padding: 5px; margin: 10px; z-index: 100;
+font-size: smaller;
+}
+
+/* Lists */
+
+dl.latex
+{ margin-top: 1ex;
+margin-bottom: 0.5ex;
+}
+
+dl.latex dl.latex dd.defbody
+{ margin-bottom: 0.5ex;
+}
+
+/* PlDoc Tags */
+
+dl.tags
+{ font-size: 90%;
+margin-left: 5ex;
+margin-top: 1ex;
+margin-bottom: 0.5ex;
+}
+
+dl.tags dt
+{ margin-left: 0pt;
+font-weight: bold;
+}
+
+dl.tags dd
+{ margin-left: 3ex;
+}
+
+td.param
+{ font-style: italic;
+font-weight: bold;
+}
+
+/* Index */
+
+dt.index-sep
+{ font-weight: bold;
+font-size: +1;
+margin-top: 1ex;
+}
+</style>
+</head>
+<body style="background:white">
+<div class="navigate"><a class="nav" href="index.html"><img src="home.gif" alt="Home"></a>
+<a class="nav" href="Contents.html"><img src="index.gif" alt="Contents"></a>
+<a class="nav" href="DocIndex.html"><img src="yellow_pages.gif" alt="Index"></a>
+<a class="nav" href="summary.html"><img src="info.gif" alt="Summary"></a>
+<a class="nav" href="metapred.html"><img src="prev.gif" alt="Previous"></a>
+<a class="nav" href="mtoplevel.html"><img src="next.gif" alt="Next"></a>
+</div>
+<h2 id="sec:overrule"><a name="sec:6.5"><span class="sec-nr">6.5</span> <span class="sec-title">Overruling 
+Module Boundaries</span></a></h2>
+
+<a name="sec:overrule"></a>
+
+<p>The module system described so far is sufficient to distribute 
+programs over multiple modules. There are, however, cases in which we 
+would like to be able to overrule this schema and explicitly call a 
+predicate in some module or assert explicitly into some module. Calling 
+in a particular module is useful for debugging from the user's top level 
+or to access multiple implementations of the same interface that reside 
+in multiple modules. Accessing the same interface from multiple modules 
+cannot be achieved using importing because importing a predicate with 
+the same name and arity from two modules results in a name conflict. 
+Asserting in a different module can be used to create models dynamically 
+in a new module. See <a class="sec" href="dynamic-modules.html">section 
+6.12</a>.
+
+<p>Direct addressing of modules is achieved using a <code><code>:</code>/2</code> 
+explicitly in a program and relies on the module qualification mechanism 
+described in <a class="sec" href="metapred.html">section 6.4</a>. Here 
+are a few examples:
+
+<pre class="code">
+?- assert(world:done).   % asserts done/0 into module world
+?- world:asserta(done).  % the same
+?- world:done.           % calls done/0 in module world
+</pre>
+
+<p>Note that the second example is the same due to the Prolog flag
+<a class="flag" href="flags.html#flag:colon_sets_calling_context">colon_sets_calling_context</a>. 
+The system predicate <a name="idx:asserta1:1702"></a><a class="pred" href="db.html#asserta/1">asserta/1</a> 
+is called in the module <code>world</code>, which is possible because 
+system predicates are <em>visible</em> in all modules. At the same time, 
+the
+<em>calling context</em> is set to <code>world</code>. Because meta 
+arguments are qualified with the calling context, the resulting call is 
+the same as the first example.
+
+<p><h3 id="sec:set-calling-context"><a name="sec:6.5.1"><span class="sec-nr">6.5.1</span> <span class="sec-title">Explicit 
+manipulation of the calling context</span></a></h3>
+
+<a name="sec:set-calling-context"></a>
+
+<p>Quintus' derived module systems have no means to separate the lookup 
+module (for finding predicates) from the calling context (for qualifying 
+meta arguments). Some other Prolog implementations (e.g., ECLiPSe and 
+IF/Prolog) distinguish these operations, using <code>@/2</code> for 
+setting the calling context of a goal. This is provided by SWI-Prolog, 
+currently mainly to support compatibility layers.
+
+<dl class="latex">
+<dt class="pubdef"><a name="@/2"><strong>@</strong>(<var>:Goal, +Module</var>)</a></dt>
+<dd class="defbody">
+Execute <var>Goal</var>, setting the calling context to <var>Module</var>. 
+Setting the calling context affects meta-predicates, for which meta 
+arguments are qualified with <var>Module</var> and transparent 
+predicates (see
+<a name="idx:moduletransparent1:1703"></a><a class="pred" href="ctxmodule.html#module_transparent/1">module_transparent/1</a>). 
+It has no implications for other predicates.
+
+<p>For example, the code <code>asserta(done)@world</code> is the same as
+<code>asserta(world:done)</code>. Unlike in <code>world:asserta(done)</code>,
+<a name="idx:asserta1:1704"></a><a class="pred" href="db.html#asserta/1">asserta/1</a> 
+is resolved in the current module rather than the module
+<code>world</code>. This makes no difference for system predicates, but 
+usually does make a difference for user predicates.
+
+<p>Not that SWI-Prolog does not define <code>@</code> as an operator. 
+Some systems define this construct using <code>op(900, xfx, @)</code>.
+</dd>
+</dl>
+
+<p></body></html>

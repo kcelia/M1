@@ -1,0 +1,167 @@
+Question 1 Enumérer au moins deux avantages de la répartition d'une base de données sur plusieurs sites.
+Question 2 Enumérer deux limites du modèle DTD par rapport au modèle XSchéma. 
+Question 3 Enumérer deux avantages d'un SGBD orienté objet par rapport à un langage de programmation orienté objet. 
+Question 4 Enumérer deux avantages du modèle XML par rapport a ux modèles de données classiques, 
+tels que le relationnel ou l'orienté objet. 
+ 
+ 
+Exercice2 : B Dr éparties   
+
+On demande d’écrire la DTD des éléments xs:key et xs :keyref de XMLSchema.  
+On pourra utiliser l’entité %XPathExpr ; , qui décrit l’ensemble des expressions XPath, pour d éfinir les expressions XPath. On suppose cette entité déjà déf inie. 
+ 
+<elt att=‘1’ />
+
+<xs: element name = 'elt' > 
+<xs: complextype>
+<xs: attribute name = 'att">
+<xs: simpletype>
+<xs:restriction base="string "/>
+<xs:enumeration value="1"/> # une seule valeur
+<xs:restriction/>
+<xs:simpletype/>
+<xs:attribute />
+<xs:complextype />
+<xs:element/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a)
+
+inset into table( select d.auteurs
+		  from lesDocs d
+	          where d.titre ="bd" )
+Values(	select ref(a)
+	from lesAuteurs a
+	where a.prenom = "alice" );
+
+
+select distinct(value(a))
+from   lesAuteurs a, tables(a.ecrit) e
+where value(e).annee ='2010' AND value(e).nbpages > 20 ;
+
+b)
+select value(a).prenom, value(a).titre  , value(m)
+from LesAuteurs a, table(a.ecrit) e, table(value(e).motscles) m
+where
+value(m) IN (select value(m) from a.domaine m )
+
+
+d)
+Qu’affiche la requête suivante?  
+select distinct value(m) 
+from LesDoc d, table(d.motscles) m 
+where d.annee = 2016 and value(m) not in 
+	(select value(m1)
+         from LesDoc d1, table(d.motscles) m1
+         where d1.annee = 2015); 
+
+ils veulent les mots de 2016 qui n'apparessent pas dans les mots des livres de 2015
+si 
+m=["alexia","steban","celia"]
+m1=["louise","celia","toto"]
+
+ca renvoit alexia steban? oui
+
+c)
+select ref(d1), ref(d2) 
+from lesdocs d1, lesdocs d2, table(d1.motscles) m1; table(d2.motcles) m2
+where value(m1) = value(m2) and rownum > 3
+groupby ref(d1), ref(d2)
+
+e)
+select value(co.prenom)
+from lesAuteurs a,  table(a.ecrits) e, table(value(e).auteurs ) co
+where  a.prenom = "alice and e.année = "2015" and co.prenom <> "alice"
+
+
+3)
+3a) En invoquant la méthode nbDoc(a) du type Auteur. 
+Pour chaque auteur ayant écrit plus de documents en 2015 qu'en 2014, 
+donner son prénom et le nombre de documents écrits en 2015
+
+
+select a.prenom, a.nbDoc(2015)
+from lesauteurs a
+where a.nbDoc(2015) > a.nbDoc(2014)
+
+
+3b) En invoquant la méthode coauteurs() du type Auteur : 
+parmi les coauteurs d'Alice afficher ceux qui ont le domaine 'Musique'? 
+
+
+
+select co.prenom 
+from LesAuteurs a , table(a.coauteur()) co
+where a.prenom = "alice" and "musique" in (select co.domaine from co) #FAUX 
+
+select value(co) from LesAuteurs a, table(acoauteurs()) co
+where a.prenom = "Alice" and exists (select * 
+				     from table(co.domaines) m 
+				      where value(m) = "Musique"
+				     );
+
+
+
+3c) Ecrire la méthode coauteurs. 
+On rappelle qu’un auteur n’est pas son propre coauteur. 
+
+create or replace type body Auteur as
+member function  coauteurs Return EnsAuteurs is
+res EnsAuteurs; 
+begin
+	select distinct value(co) 
+				  bulk collect into res
+	from table(self.ecrits) e, table(value(e).auteurs) co
+	where value(co).prenom <> prenom;
+	
+	return res;
+end;
+end;
+
+
+4)
+create or replace type body Auteur as 
+member function domainesDistants(d number) returnEnsMots is
+
+res EnsMots ;
+begin
+
+	if d > 1 then 
+		select distinct(value(d)) bulk collect into res 
+		from table(domaines) d
+	
+		UNION
+		select value(e) 
+		from table(self.coauteur() ) co, 
+		     table(value(co).domainesDistinct(d-1)) e
+		     where deref(value(e) <> self ; 
+	else 
+		res := domaines;
+
+		
+	end if;2
+end;
+end;
+
+
+
+
+
+
+tu voulais savoir est ce que x*=(3,1) etait optimale ?
+
+etape 1 tu prends ton systeme 
+Minz 2X1+3X2

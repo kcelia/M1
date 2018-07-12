@@ -1,0 +1,346 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<title>SWI-Prolog 7.6.2 Reference Manual: Section 4.40</title><link rel="home" href="index.html">
+<link rel="contents" href="Contents.html">
+<link rel="index" href="DocIndex.html">
+<link rel="summary" href="summary.html">
+<link rel="previous" href="debugger.html">
+<link rel="next" href="profile.html">
+
+<style type="text/css">
+
+/* Style sheet for SWI-Prolog latex2html
+*/
+
+dd.defbody
+{ margin-bottom: 1em;
+}
+
+dt.pubdef
+{ background-color: #c5e1ff;
+}
+
+dt.multidef
+{ background-color: #c8ffc7;
+}
+
+.bib dd
+{ margin-bottom: 1em;
+}
+
+.bib dt
+{ float: left;
+margin-right: 1.3ex;
+}
+
+pre.code
+{ margin-left: 1.5em;
+margin-right: 1.5em;
+border: 1px dotted;
+padding-top: 5px;
+padding-left: 5px;
+padding-bottom: 5px;
+background-color: #f8f8f8;
+}
+
+div.navigate
+{ text-align: center;
+background-color: #f0f0f0;
+border: 1px dotted;
+padding: 5px;
+}
+
+div.title
+{ text-align: center;
+padding-bottom: 1em;
+font-size: 200%;
+font-weight: bold;
+}
+
+div.author
+{ text-align: center;
+font-style: italic;
+}
+
+div.abstract
+{ margin-top: 2em;
+background-color: #f0f0f0;
+border: 1px dotted;
+padding: 5px;
+margin-left: 10%; margin-right:10%;
+}
+
+div.abstract-title
+{ text-align: center;
+padding: 5px;
+font-size: 120%;
+font-weight: bold;
+}
+
+div.toc-h1
+{ font-size: 200%;
+font-weight: bold;
+}
+
+div.toc-h2
+{ font-size: 120%;
+font-weight: bold;
+margin-left: 2em;
+}
+
+div.toc-h3
+{ font-size: 100%;
+font-weight: bold;
+margin-left: 4em;
+}
+
+div.toc-h4
+{ font-size: 100%;
+margin-left: 6em;
+}
+
+span.sec-nr
+{
+}
+
+span.sec-title
+{
+}
+
+span.pred-ext
+{ font-weight: bold;
+}
+
+span.pred-tag
+{ float: right;
+padding-top: 0.2em;
+font-size: 80%;
+font-style: italic;
+color: #202020;
+}
+
+div.caption
+{ width: 80%;
+margin: auto;
+text-align:center;
+}
+
+/* Footnotes */
+
+sup.fn { color: blue; text-decoration: underline; }
+span.fn-text { display: none; }
+sup.fn span {display: none;}
+sup:hover span
+{ display: block !important;
+position: absolute; top: auto; left: auto; width: 80%;
+color: #000; background: white;
+border: 2px solid;
+padding: 5px; margin: 10px; z-index: 100;
+font-size: smaller;
+}
+
+/* Lists */
+
+dl.latex
+{ margin-top: 1ex;
+margin-bottom: 0.5ex;
+}
+
+dl.latex dl.latex dd.defbody
+{ margin-bottom: 0.5ex;
+}
+
+/* PlDoc Tags */
+
+dl.tags
+{ font-size: 90%;
+margin-left: 5ex;
+margin-top: 1ex;
+margin-bottom: 0.5ex;
+}
+
+dl.tags dt
+{ margin-left: 0pt;
+font-weight: bold;
+}
+
+dl.tags dd
+{ margin-left: 3ex;
+}
+
+td.param
+{ font-style: italic;
+font-weight: bold;
+}
+
+/* Index */
+
+dt.index-sep
+{ font-weight: bold;
+font-size: +1;
+margin-top: 1ex;
+}
+</style>
+</head>
+<body style="background:white">
+<div class="navigate"><a class="nav" href="index.html"><img src="home.gif" alt="Home"></a>
+<a class="nav" href="Contents.html"><img src="index.gif" alt="Contents"></a>
+<a class="nav" href="DocIndex.html"><img src="yellow_pages.gif" alt="Index"></a>
+<a class="nav" href="summary.html"><img src="info.gif" alt="Summary"></a>
+<a class="nav" href="debugger.html"><img src="prev.gif" alt="Previous"></a>
+<a class="nav" href="profile.html"><img src="next.gif" alt="Next"></a>
+</div>
+<h2 id="sec:statistics"><a name="sec:4.40"><span class="sec-nr">4.40</span> <span class="sec-title">Obtaining 
+Runtime Statistics</span></a></h2>
+
+<a name="sec:statistics"></a>
+
+<dl class="latex">
+<dt class="pubdef"><a name="statistics/2"><strong>statistics</strong>(<var>+Key, 
+-Value</var>)</a></dt>
+<dd class="defbody">
+Unify system statistics determined by <var>Key</var> with <var>Value</var>. 
+The possible keys are given in the <a class="tab" href="statistics.html#tab:statistics">table 
+6</a>. This predicate supports additional keys for compatibility 
+reasons. These keys are described in <a class="tab" href="statistics.html#tab:qpstatistics">table 
+7</a>.
+
+<p><table border="2" frame="box" rules="groups" style="margin:auto">
+<tr valign="top"><td colspan=2 align=center>Native keys (times as float 
+in seconds)</tr>
+<tbody>
+<tr valign="top"><td>agc</td><td>Number of atom garbage collections 
+performed </td></tr>
+<tr valign="top"><td>agc_gained</td><td>Number of atoms removed </td></tr>
+<tr valign="top"><td>agc_time</td><td>Time spent in atom garbage 
+collections </td></tr>
+<tr valign="top"><td>atoms</td><td>Total number of defined atoms </td></tr>
+<tr valign="top"><td>c_stack</td><td>System (C-) stack limit. 0 if not 
+known. </td></tr>
+<tr valign="top"><td>cgc</td><td>Number of clause garbage collections 
+performed </td></tr>
+<tr valign="top"><td>cgc_gained</td><td>Number of clauses reclaimed </td></tr>
+<tr valign="top"><td>cgc_time</td><td>Time spent in clause garbage 
+collections </td></tr>
+<tr valign="top"><td>clauses</td><td>Total number of clauses in the 
+program </td></tr>
+<tr valign="top"><td>codes</td><td>Total size of (virtual) executable 
+code in words </td></tr>
+<tr valign="top"><td>cputime</td><td>(User) <span style="font-variant:small-caps">CPU</span> 
+time since thread was started in seconds </td></tr>
+<tr valign="top"><td>epoch</td><td>Time stamp when thread was started </td></tr>
+<tr valign="top"><td>functors</td><td>Total number of defined name/arity 
+pairs </td></tr>
+<tr valign="top"><td>global</td><td>Allocated size of the global stack 
+in bytes </td></tr>
+<tr valign="top"><td>globalused</td><td>Number of bytes in use on the 
+global stack </td></tr>
+<tr valign="top"><td>globallimit</td><td>Size to which the global stack 
+is allowed to grow </td></tr>
+<tr valign="top"><td>global_shifts</td><td>Number of global stack 
+expansions </td></tr>
+<tr valign="top"><td>heapused</td><td>Bytes of heap in use by Prolog (0 
+if not maintained) </td></tr>
+<tr valign="top"><td>inferences</td><td>Total number of passes via the 
+call and redo ports since Prolog was started </td></tr>
+<tr valign="top"><td>modules</td><td>Total number of defined modules </td></tr>
+<tr valign="top"><td>local</td><td>Allocated size of the local stack in 
+bytes </td></tr>
+<tr valign="top"><td>local_shifts</td><td>Number of local stack 
+expansions </td></tr>
+<tr valign="top"><td>locallimit</td><td>Size to which the local stack is 
+allowed to grow </td></tr>
+<tr valign="top"><td>localused</td><td>Number of bytes in use on the 
+local stack </td></tr>
+<tr valign="top"><td>table_space_used</td><td>Amount of bytes in use by 
+the thread's answer tables </td></tr>
+<tr valign="top"><td>trail</td><td>Allocated size of the trail stack in 
+bytes </td></tr>
+<tr valign="top"><td>trail_shifts</td><td>Number of trail stack 
+expansions </td></tr>
+<tr valign="top"><td>traillimit</td><td>Size to which the trail stack is 
+allowed to grow </td></tr>
+<tr valign="top"><td>trailused</td><td>Number of bytes in use on the 
+trail stack </td></tr>
+<tr valign="top"><td>shift_time</td><td>Time spent in stack-shifts </td></tr>
+<tr valign="top"><td>stack</td><td>Total memory in use for stacks in all 
+threads </td></tr>
+<tr valign="top"><td>predicates</td><td>Total number of predicates. This 
+includes predicates that are undefined or not yet resolved. </td></tr>
+<tr valign="top"><td>process_epoch</td><td>Time stamp when Prolog was 
+started </td></tr>
+<tr valign="top"><td>process_cputime</td><td>(User) <span style="font-variant:small-caps">CPU</span> 
+time since Prolog was started in seconds </td></tr>
+<tr valign="top"><td>thread_cputime</td><td>MT-version: Seconds CPU time 
+used by finished threads. Basically non-portable. Works on Linux, 
+MacOSX, Windows and probably some more. </td></tr>
+<tr valign="top"><td>threads</td><td>MT-version: number of active 
+threads </td></tr>
+<tr valign="top"><td>threads_created</td><td>MT-version: number of 
+created threads </td></tr>
+<tr valign="top"><td>engines</td><td>MT-version: number of existing 
+engines </td></tr>
+<tr valign="top"><td>engines_created</td><td>MT-version: number of 
+created engines </td></tr>
+</table>
+<div class="caption"><b>Table 6 : </b>Keys for <a name="idx:statistics2:1562"></a><a class="pred" href="statistics.html#statistics/2">statistics/2</a>. 
+Space is expressed in bytes. Time is expressed in seconds, represented 
+as a floating point number.</div>
+<a name="tab:statistics"></a>
+
+<p><table border="2" frame="box" rules="groups" style="margin:auto">
+<tr valign="top"><td colspan=2 align=center>Compatibility keys (times in 
+milliseconds)</tr>
+<tbody>
+<tr valign="top"><td>runtime</td><td>[ CPU time, CPU time since last ] 
+(milliseconds, excluding time spent in garbage collection) </td></tr>
+<tr valign="top"><td>system_time</td><td>[ System CPU time, System CPU 
+time since last ] (milliseconds)</td></tr>
+<tr valign="top"><td>real_time</td><td>[ Wall time, Wall time since last 
+] (integer seconds. See <a name="idx:gettime1:1563"></a><a class="pred" href="system.html#get_time/1">get_time/1</a>) </td></tr>
+<tr valign="top"><td>walltime</td><td>[ Wall time since start, Wall time 
+since last] (milliseconds, SICStus compatibility) </td></tr>
+<tr valign="top"><td>memory</td><td>[ Total unshared data, free memory ] 
+(Uses getrusage() if available, otherwise incomplete own statistics.) </td></tr>
+<tr valign="top"><td>stacks</td><td>[ global use, local use ] </td></tr>
+<tr valign="top"><td>program</td><td>[ heap, 0 ] </td></tr>
+<tr valign="top"><td>global_stack</td><td>[ global use, global free ] </td></tr>
+<tr valign="top"><td>local_stack</td><td>[ local use, local free ] </td></tr>
+<tr valign="top"><td>trail</td><td>[ trail use, trail free ] </td></tr>
+<tr valign="top"><td>garbage_collection</td><td>[ number of GC, bytes 
+gained, time spent, bytes left ] The last column is a SWI-Prolog 
+extension. It contains the sum of the memory left after each collection, 
+which can be divided by the count to find the average working set size 
+after GC. Use <code>[Count, Gained, Time|_]</code> for compatiblity. </td></tr>
+<tr valign="top"><td>stack_shifts</td><td>[ global shifts, local shifts, 
+time spent ] </td></tr>
+<tr valign="top"><td>atoms</td><td>[ number, memory use, 0 ] </td></tr>
+<tr valign="top"><td>atom_garbage_collection</td><td>[ number of AGC, 
+bytes gained, time spent ] </td></tr>
+<tr valign="top"><td>clause_garbage_collection</td><td>[ number of CGC, 
+clauses gained, time spent ] </td></tr>
+<tr valign="top"><td>core</td><td>Same as memory </td></tr>
+</table>
+<div class="caption"><b>Table 7 : </b>Compatibility keys for <a name="idx:statistics2:1564"></a><a class="pred" href="statistics.html#statistics/2">statistics/2</a>. 
+Time is expressed in milliseconds.</div>
+<a name="tab:qpstatistics"></a>
+</dd>
+<dt class="pubdef"><a name="statistics/0"><strong>statistics</strong></a></dt>
+<dd class="defbody">
+Display a table of system statistics on the stream <code>user_error</code>.</dd>
+<dt class="pubdef"><a name="time/1"><strong>time</strong>(<var>:Goal</var>)</a></dt>
+<dd class="defbody">
+Execute <var>Goal</var> just like <a name="idx:call1:1565"></a><a class="pred" href="metacall.html#call/1">call/1</a> 
+and print time used, number of logical inferences and the average number 
+of <var>lips</var> (logical inferences per second). Note that SWI-Prolog 
+counts the actual executed number of inferences rather than the number 
+of passes through the call and redo ports of the theoretical 4-port 
+model. If <var>Goal</var> is non-deterministic, print statistics for 
+each solution, where the reported values are relative to the previous 
+answer.
+</dd>
+</dl>
+
+<p></body></html>

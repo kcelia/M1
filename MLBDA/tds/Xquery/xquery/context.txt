@@ -1,0 +1,59 @@
+{-- ----------------------------------------------
+       Use Case "XMP" : Experiences and Exemplars
+     ---------------------------------------------- --}
+
+define element bib { type Book* }
+
+define type Book {
+  element book {
+    attribute year { xsd:int },
+    element title { xsd:string },
+    (type Author+ | type Editor+),
+    element publisher { xsd:string },
+    element price { xsd:string }
+  }
+}
+define type Author {
+  element author {
+    element last { xsd:string },
+    element first { xsd:string }
+  }
+}
+define type Editor {
+  element editor {
+    element last { xsd:string },
+    element first { xsd:string },
+    element affiliation { xsd:string }
+  }
+}
+define element reviews { type Entry* }
+define type Entry { element entry { type Title, type Price, type Review } }
+define type Title { element title { xsd:string } } 
+define type Price { element price { xsd:string } }
+define type Review { element review { xsd:string } }
+define element prices { type PBook* }
+define type PBook {
+  element book {
+    element title { xsd:string },
+    element source { xsd:string },
+    element price { xsd:double }
+  }
+}
+
+define element title { text }
+define element section { 
+  element title, 
+  element section*
+}
+define element chapter { 
+  element title,
+  element section*
+}
+
+
+define global $books { treat as document chapter (glx:document-validate("book.xml","chapter")) }
+
+define global $bib { treat as document bib (glx:document-validate("bib.xml","bib")) }
+define global $reviews { treat as document reviews (glx:document-validate("review.xml","reviews")) }
+
+define global $prices { treat as document prices (glx:document-validate("price.xml","prices")) }

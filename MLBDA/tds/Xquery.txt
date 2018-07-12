@@ -1,0 +1,212 @@
+données collection de données xml
+
+
+variable $nom 
+logique 	ns or 
+	rithmetiUE +-/ % 
+
+COMPARAISON 
+valeurs eq ne lt le gt ge
+generale
+
+
+ expression de chemin 
+
+on dit sur quel doc on l applique puis c idem ac xpath, 
+contexte : document("bib.xml") 
+fonction : document
+dans une expression xsquery commence par la fonction document 
+document("bib.xml")//book//author[last = "martin"]
+document("bib.xml")//book/author[last = "martin"], car author est un fils de book
+deuxieme facon commencer par une variable
+
+$alice/last
+variable est un morceau de document 
+tout morceau d un arbre est un arbre 
+une variable peut contenir autre chose que des valeurs, un arbre 
+
+contexte courant:
+on l utilise jamais 
+
+sequence ()
+
+($prix,1, $prix*0.8)
+$prix contient une valeur 
+
+comparaison de valeur
+
+operateur egalité : eq 
+ne diferieur
+lt inferieur
+le inferieur egal
+gt superieur
+ge superieur ou egale
+
+$book1/author eq "ullman"
+author a deux fils first et last, on fait une concatenation, stevensW. (sans espace)
+
+
+compare la valeur textuel
+<a>5</a> eq  <b>5</b>
+
+
+$s1 =$s2 (tous les titres dans le doc 1, tous les titres dans s2).
+renvoie vraie ssi s'il existe un x dans $s1 et un y dans $s2 tel que x eq y 
+
+= peut comparer deux types different 
+
+eq ne fonctionne pas avec les sequences 
+eq fonctionne qu avec deux de meme types.
+
+$book2/author c une sequence de 3 elements
+
+comparaison de deux arbres, en profondeur
+fonction :         deep-equals($auteur1,$auteur2)
+
+
+
+(1,2,1)  != (1,2) x ne y return true car pour un x de seq1 x=1 et y = 2 dans seq2 x != y return true 
+
+
+
+
+
+
+
+
+
+Si $b désigne l’élément  
+
+<book isbn="isbn-1234567890">   
+	<titre>100 ans de solitude</titre>    
+		<auteur>   
+  			<prenom>Gabriel</prenom>  
+   			<nom>Garcia Marquez</nom>  
+  		</auteur>
+</book>
+
+Le résultat est : 
+<exemple>  <p> Ceci est une requête. </p>  <req> $b/titre </req>  <p> Ceci est le résultat de la requête. </p> <req>  <titre>100 ans de solitude</titre>  </req>  </exemple>  
+ 
+
+
+
+
+
+
+
+
+
+
+sql <=> xsquery 
+
+select <=> return
+from <=> for, java for (int x : ...)
+where (apres le where pas de let )
+let   ( declare une variable et fait une affectation, creer a chaque iteration, le for inclue le let)
+where 
+
+requete xsquery {}
+
+for $p in document(...)// publisher  ( ensemble d element, $p ( le nom ), permet d iterer sur cet ensemble )
+let $b := document(...)//bookbook//[publisher = $p] // $b une sequence de livre 
+where count($b) > 100 
+reutn $p
+
+fonction predefinie : count 
+
+
+for ù$x in document(...) // book
+where $x/author[last = "ullman"] 
+retur $x/title
+
+$x/author, $x c un ensemble de livre, $x/author ens d author avec des last first 
+$x/author[last = "ullman"] n est pas une valeur booleanne c un ensemble, c'est un EXIST 	
+$x/author/last = "ullman" => valeur bool
+$x/author/last = "ullman" est la sequence ("abitbool","buljhj","celia") return false 
+
+
+<books>
+{for $x in document(?bib.xml?)//book
+Where $x/author[last = ? Ullman ?]  <=>
+some $a in $x/author in $x/author satifies $a/last = "ullman" // ou $a /last eq "ullman" // vrai pour un element dans l ensemble
+Return If ($x/@year > ?2005?) 
+Then <book>{$x/title} ?est un livre récent? </book>
+Else () 
+} 
+</books>
+
+
+
+every vraie pour tous les elements dans l ensemble 
+
+
+....
+return <book year = "{$b/@years} >
+		{$b/title}
+	</book>
+
+si return $b c correcte 
+mais les deux structures sont differentes 
+
+book a le fils publisher title price ...
+on ne veut pas tous ses fils, donc on construit une nouvelle structure 
+avec juste le titre du livre (on simplifie la structure initiale)
+
+
+<results> 
+{ 
+for $b in document("www.bn.com")/bib/book,  
+$t in $b/title    ( titre est unique )
+$a in $b/author Return  
+<result>  
+{ $t}  // on peut mettre $t/title
+{ $a } // si ont fait $a/author return un ensemble d author, pas bon
+</result> 
+} 
+</results> 
+
+
+
+{ $b/author  }  ensemble d author 
+
+
+
+distinct values :
+enleve les doubles et convertie en une chaine de caractaire
+
+
+<results> 
+{
+for $a in distinct (document("bib.xml")//author) 
+Remarque: $a est un ensemble d author distincts, on ne sait s'il a gardé Addison wels de TcpIp ou Advenced Programming.  
+return       
+	<result> 
+            { $a }  
+            {for $b in document("bib.xml")/bib/book,    
+		 $ba in $b/author    
+             where $ba = $a   
+	     Remarque: = => eq, pour etre plus propre deep-equals ($ba,$a)
+	     some ...           
+             return $b/title           
+  	     }
+         </result>   
+} 
+</results>
+
+
+pour chaque contacte les personnes qui habitent dans le meme quartier 
+paul paul
+paul martin
+martin paul
+martin marin
+jean jean 
+claude claude 
+
+
+
+conclusion
+naviguer grace a 
+on generer des arbres
+
+

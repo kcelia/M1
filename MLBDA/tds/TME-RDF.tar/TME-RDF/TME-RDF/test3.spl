@@ -1,0 +1,13 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX f: <http://www.cems.uwe.ac.uk/empdept/concept/>
+PREFIX : <http://www.abc.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+ 
+
+select count(distinct ?n) ?d
+{
+?n f:Dept ?d
+}
+group by ?d

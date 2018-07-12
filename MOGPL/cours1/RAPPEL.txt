@@ -1,0 +1,37 @@
+les arcs dits « arrière » qui sont de la forme (x,y) avec x descendant de y dans A 
+Le graphe G comporte un circuit si et seulement si, après un parcours en profondeur, G possède au moins un arc arrière. 
+
+
+Il est assez évident que si G possède un arc arrière (x,y) alors il comporte un circuit. En effet, comme x est un descendant de y dans l'arborescence du parcours, on a un chemin de y à x dans G, qui forme un circuit lorsqu'on le complète par l'arc (x,y). 
+
+
+
+ En effet, pour détecter un circuit, il suffit de détecter la présence d'un arc 
+Cours du 14 novembre 2007
+arrière (X,Y). 
+
+
+Soit G un graphe sans circuit. Alors G possède un sommet sans successeur. Preuve Si chaque sommet avait un successeur, alors en partant d'un sommet quelquonque x1, on pourrait trouver un successeur x2, qui lui-même aurait un sucesseur x3,.... Comme le graphe ne comporte pas de circuit, on ne pourrait pas avoir xi =xj. Comme il n'y a qu'un nombre fini de sommets, c'est impossible.
+
+
+Soit G un graphe sans circuit. Alors G possède une numérotation topologique. 
+
+Déf.  Une chaîne dans un graphe non-orienté G = (V, E) est une séquence P de sommets v1, v2, …, vk-1, vk avec la propriété que chaque paire consécutive de sommets vi, vi+1 est reliée par une arête de E.
+Def.  Un graphe non-orienté est connexe si pour toutes paires de sommets u et v, il existe une chaîne entre u et v. Def.  Une composante connexe est un sous-ensemble de sommets induisant un sous-graphe connexe et maximal pour l’inclusion.
+
+Déf.  Un chemin dans un graphe orienté G = (V, A) est une séquence P de sommets v1, v2, …, vk-1, vk avec la propriété que chaque paire consécutive de sommets vi, vi+1 est reliée par une arc (vi, vi+1) de A.
+Def.  Un graphe orienté est fortement connexe si pour toutes paires de sommets u et v, il existe un chemin de u à v (et un chemin de v à u). Def.  Une composante fortement connexe est un ensemble de sommets induisant un sous-graphe fortement connexe et maximal pour l’inclusion.
+
+Déf.  Un cycle est une chaîne v1, v2, …, vk-1, vk dans laquelle v1 = vk, k > 2, (et deux arêtes consécutives toujours distinctes).
+Déf.  Un graphe non-orienté est un arbre s’il est connexe et ne contient pas de cycle. Théorème.  Soit G un graphe non-orienté avec n sommets. Toute paire parmi les assertions suivantes implique la troisième. ? G est connexe. ? G ne contient pas de cycle. ? G a n-1 arêtes.
+Dualité faible. Soit f un flot arbitraire, et soit (A, B) une s-t coupe arbitraire.  Alors la valeur du flot est au plus la capacité de la coupe. 
+
+
+Trouver le meilleur majorant  trouver une coupe de capacité minimum ?
+v(flot) = v(flot max) = Cap(coupe min) = Cap(coupe)
+Corollaire (certificat d’optimalité): si on trouve un flot f et une coupe (A,B) tels que v(f)=cap(A,B), alors - f est un flot maximum - (A,B) est une coupe minimum
+
+
+
+
+

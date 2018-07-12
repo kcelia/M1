@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!ELEMENT restaurant (nom,fermeture,ville,etoile,menus) >
+<!ELEMENT nom (#PCDATA) >
+<!ELEMENT fermeture (#PCDATA) >
+<!ELEMENT ville (nom,departement,monument)>
+<!ELEMENT departement (#PCDATA)>
+<!ELEMENT monument (nom,tarif)>
+<!ELEMENT tarif (#PCDATA)>
+<!ELEMENT etoile (#PCDATA)>
+<!ELEMENT menus(menu+)>  
+<!ELEMENT menu (nom,prix)>
+<!ELEMENT prix (#PCDATA)>
+	  

@@ -1,0 +1,66 @@
+Tina version 3.4.0 -- 07/24/15 -- LAAS/CNRS
+
+mode -R
+
+INPUT NET ------------------------------------------------------- 
+
+parsed net r_b1s1r1
+
+4 places, 5 transitions
+
+net r_b1s1r1
+tr t0 p0*2 -> p1 p2*2 
+tr t1 p1 -> p3 
+tr t2 p2 p3 -> p0*2 
+tr t3 p2 -> p3 
+tr t4 p3 -> p2 
+pl p1 (1)
+
+0.000s
+
+REACHABILITY ANALYSIS ------------------------------------------- 
+
+bounded
+
+3 marking(s), 3 transition(s)
+
+MARKINGS:
+
+0 : p1
+1 : p3
+2 : p2
+
+REACHABILITY GRAPH:
+
+0 -> t1/1
+1 -> t4/2
+2 -> t3/1
+
+0.000s
+
+LIVENESS ANALYSIS ----------------------------------------------- 
+
+not live
+not reversible
+
+0 dead marking(s), 2 live marking(s)
+2 dead transition(s), 2 live transition(s)
+
+dead transition(s): t2 t0
+
+STRONG CONNECTED COMPONENTS:
+
+0 : 2 1
+1 : 0
+
+SCC GRAPH:
+
+0 -> t3/0, t4/0
+1 -> t1/0
+
+0.000s
+
+ANALYSIS COMPLETED ---------------------------------------------- 
+
+
+

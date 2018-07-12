@@ -1,0 +1,13 @@
+aucune capacité de generalisation si le modele englobe tous elements de la classe 0
+
+bon critiere :
+testet sur des données vierges 
+
+
+
+Apprentissage bcp evalution peu 
+Sous apprentissage 
+On se boure de model, pas mal de parametre et peu de donner pour l entrainé 
+N etats est grand 
+Discrtiser ca on est incaple de trvl ac des données continues
+Markov caché depasse cette limitié 
