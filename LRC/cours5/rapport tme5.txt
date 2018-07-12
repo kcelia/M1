@@ -1,0 +1,68 @@
+Vous trouverez ci dessous les répondes et fichiers.pl du tme5
+ 
+EX1)
+r(a,b).
+r(f(X),Y) :- p(X,Y).
+p(f(X),Y) :- r(X,Y).
+C1 = r(a,b)
+C2 = por tout X , pour tout Y , p(X,Y) ---> r(f(X),Y)
+C3 = r(X,Y) --> p(f(X),Y)
+Q1.
+On a G = r(f(f(a)),b) 
+Etap 1 : sigma1(neg G) , sigma1(C2) qui donne C4 = neg p(f(a),b)
+avec sigma1 { X <- f(a) , Y <-  b}
+Etap 2 : sigma2(C4)  , sigma2(C3) donne C5 = neg r(a,b)
+avec sigma2 {X -> a , Y -> b}
+Etap 3 : C5 , C1 donne vide (carré)
+Q2)
+G = p(f(a),b)
+Etap 1 : sigma1(neg G) , sigma1(C3) qui donne C4 = neg r(a,b)
+avec sigma1 { X -> a , Y -> b}
+Etap 2 : sigma2(C4)  , sigma2(C1) donne vide 
+ 
+ 
+EX2)
+C1 : r(a,b)
+C2 : q(X,X)
+C3 : r(X,Y) and q(Y,Z) -> q(X,Z)
+Q1)
+G = q(X,b)
+Etap 1 : sigma1(neg G) , sigma1(C2) qui donne vide
+avec sigma1 { X <- b}
+Q2)
+G = q(b,X)
+Etap 1 : sigma1(neg G) , sigma1(C2) qui donne vide
+avec sigma1 { X <- b}
+ montre que neg G est non valide
+il peut unifier soit avec c2 ou c3
+EX3) 
+Q1)
+C1 : revise(X) :- serieux(X).
+C2 : reussit(X):- revise(X).
+C3 : serieux(X):- devoir(X).
+C4 : devoir(X) :- cons(X).
+C5 : cons(p).
+C6 : cons(z)
+Q2) 
+?- reussit(X).
+X = p ;
+X = z.
+Donc les deux vont reussir , en effet on a deux manier de montrer , premier affecter a varibale X valeur p et deuxime affecter a varibale X valeur z.
+Q3)
+G = reussit(X)
+premier manier :
+Etap 1 : sigma1(neg G) , sigma1(C2) qui donne C7 = neg revise(X)
+avec sigma1 { }
+Etap 2: sigma2(C7) , sigma2(C1) qui donne C8 = neg serieux(X)
+avec sigma2 {  }
+Etap 3: sigma3(C8) , sigma3(C3) qui donne C9 = neg devoir(X)
+avec sigma3 {  }
+Etap 4: sigma4(C9) , sigma4(C4) qui donne C10 = neg cons(X)
+avec sigma4 {  }
+Ici on peut avoir deux substitutions possibles : sigma5 et sigma6  pour X = p et X =  z respectivement.
+Etap 5: sigma5(C10) , sigma5(C5) qui donne vide
+ou 
+sigma6(C10) , sigma6(C5) qui donne vide
+avec sigma5 { X <- p }
+avec sigma5 { X <- z }
+EXO4)

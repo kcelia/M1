@@ -1,0 +1,105 @@
+Voici le compte rendu du TME1 : 
+
+EXO1.2:
+
+F1 = and A not imp B A
+La formule F1 est insatisfiable, d'apres l'arbre dessiné par Lotrec l'unique noeud est fermé.
+
+F2 = imp and or A C or B C imp not B or and A B C
+La formule F2 est satisfiable. D'apres l'arbre dessiné par Lotrec, les 5 feuilles sont ouvertes.
+Si on ajoute un not au début de la formule on voit que la négation de la formule F2 n'est pas satisfiable ( 4 feuilles clash, donc F2 est valide ).
+
+F3= not  imp imp A B imp not B not A 
+On obtient : 2 feuilles clash donc F3 est non satisfiable et la négation de F3 est valide 
+
+ 
+F4= or and imp A B imp B C  and imp C B imp B A
+on observe 6 feuilles ouvertes et 2 feuilles clash 
+la formule est satisfiable, mais pas valide car il ya au moins un clash 
+
+F5 = imp imp A B equiv imp B C imp A C 
+la formule est satisfiable car il ya au moins une feuille ouverte et non valide car il ya au moins une feuille clash 
+
+F6 = not imp and imp A B imp B C imp A C 
+la formule est satisfiable car il ya au moins une feuille ouverte et elle est valide car la negation de la formule F6 possede que des feuilles clash 
+
+exo 1.3
+no
+on associe :
+ Grippe  ---> g
+ tamiflu ---> tam
+ fievre  ---> f
+ toux    ---> to
+ sup38   ---> s
+ 
+ formalisation :
+ (a) : s ->f
+ (b) : g ->tam
+ (c) : f and to -> g
+ (d) : to and s
+ 
+ on cherche a savoir si le tamiflu est conséquence sémantique de F, ou F = a and b and c and d
+ pour se faire on utilise la méthode de réfutation, c-a-d 
+ on cherche a savoir F and not tamiflu est valide ou pas 
+ en mode préfix on obtient la formule suivante :
+F =and and and imp S F imp G TAM and imp and F TO G and TO S not TAM 
+
+ la formule est insatisfiable donc il n’existe pas d'interprétation pour la quelle F prend la valeur de vérité 1  et tam prend la valeur de vérité 0 
+ donc tam est conséquence sémantique de F, il faut prendre le tamiflu 
+ 
+ 
+ 1.3.3* 
+ 
+ bronchite --> br 
+  formalisation :
+ (a) : s ->f
+ (b) : g ->tam
+ (c) : f and to -> g or br
+ (d) : to and s
+ 
+ en procedant de la meme maniere que dans la question 1.3
+ 
+ 
+ l'arbre obtenu donne : 
+ 7 feuilles clash donc F'and not tam n'est pas valide 
+ 1 feuille ouverte donc F' and not tam est satisfiable
+ 
+ la prise du tamiflu n'est pas conséquence sémantique.
+ 
+ 
+ exo 1.4:
+ Q1 :
+ I1= A-> 1 B-> 1 C-> 1
+ I2= A-> 1 B-> 1 C-> 0
+ I4= A-> 1 B-> 0 C-> 0
+ I5= A-> 0 B-> 1 C-> 1
+ I6= A-> 0 B-> 0 C-> 0
+ I7= A-> 1 B-> 0 C-> 0
+ 
+ F =  or and  imp A B and  B C and imp C B imp  B A
+ 
+On a 5 feuilles ouvertes  et une feuille clash 
+En executant , on obtient les 5 pré-modeles ci-dessous : 
+Pré-modele P1 : B -> 1 et A -> 1
+pré-modele P2 : A -> 1 et C -> 0
+pré-modele P3 : B -> 1, C -> 1 et A -> 0
+pré-modele P4 : B -> 0 et C -> 0
+et pré_modele P2.2.1 CLASH 
+
+On constate que le modele : 
+
+
+3.
+m(P1) : A -> 1, B -> 1, C -> 1
+m(p2) : A -> 1, B -> 1
+m(p3) : A -> 1
+
+
+la formule F = F1 or F2 or F3 où 
+F1 A and B and C 
+F2 = A and B et F3 = A
+
+d'apres l'arbre obtenu on obtient 3 prés modeles correspondant à P1, P2 et P3 ou P3 est inclu dans P2 qui lui est inclu dans P1
+
+
+FIN

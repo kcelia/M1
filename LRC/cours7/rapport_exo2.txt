@@ -1,0 +1,118 @@
+
+exo2):
+
+1)- Ces règles traduisent une relation de transivité.
+
+2)
+?- subs(canaris,animal).
+true.
+
+?- subs(chat,vivant).
+true.
+
+Par transitivité de 
+subs(chat,felin) puis subs(felin,mammifer) puis subs(mammifer,animal).subs(animal,vivant).
+
+
+?- subsS1(chien,souris).
+Le programme boucle infinement 
+a cause des lignes :
+subs(chien,canides).
+subs(canides,chien).
+comme chien est different de souris, on applique la regle suivante :
+subsS1(A,E):-subs(A,D),subsS1(D,E),A\==D,D\==E, A\==E.
+subs(A,D) on a : A = chien, D = canides
+prolog cherche subsS1(canides,E) et le seul E qui le satisfait est E = chien ce qui genere une boucle infine.
+
+avec le teste 
+?- subsS(chien,souris). on obtient false.
+car :
+comme chien est different de souris, on applique : subsS(C,D) :- subsS( C,D, [D]).
+c-a-d, on fait appel a la regle subsS avec trois elemnts C= chien, D= souris, [D] = [souris]
+on applique subsS(C,D,L) :- subs(C,E), not(member(E,L)),subsS(E,D,[E|L]),E\==D.
+le seul E qui l'a satisfait subs(C,E) est canides, avec cette valeur, a deuxieme condition est satisfaite car canides n'est pas dans liste, finalement on cherche subsomption de canides et souris en ajoutant canides a la liste.
+il n'y a aucun D qui satisfait la regle subsS(E,D,[E|L]) car la seule relation subs( canides , D ), D = chien et chien est la liste L donc on obtient false au lieux de boucler comme dans la regle precedente.
+
+4.
+
+Toutes les requetes ci-dessous ont réussi.
+
+?- subsS(canaris,animal,_).
+true ;
+
+
+?- subsS(chat,vivant).
+true ;
+
+
+?- subsS(chien,canides).
+true ;
+
+
+?- subsS(chien,chien).
+true ;
+
+5.
+
+subsS(souris, some(mange)).
+true .
+
+# cette requete réussi meme si "il existe n'est pas un concepte atomique" car 
+ subsS(animal,some(mange)) est satisfaite si subs(souris,animal) ce qui est vrai 
+
+subsS(lion, all(mange, animal)).
+true .
+
+6.
+subsS(chat, humain).
+false.
+
+subsS(chien, souris).
+false.
+
+
+7.
+
+subsS(chat, X).
+X = chat ;
+X = felin ;
+X = mammifere ;
+X = animal ;
+X = etreVivant ;
+X = some(aMaitre) ;
+X = some(mange) ;
+
+
+
+subsS(X, mammifere).
+X = mammifere ;
+X = souris ;
+X = felin ;
+X = canide ;
+X = chat ;
+X = lion ;
+X = chien ;
+
+8.
+
+subs(A, B):- equiv(A, B).
+subs(B, A):- equiv(A, B).
+
+Les modifications:
+equiv(chien, canide).
+equiv(carnivore, all(mange, animal)).
+equiv(herbivore, all(mange, plante)).
+
+9.
+
+subsS(lion, all(mange, animal)).
+true .
+
+10.
+
+subs est une requête atomique et terminale donc la résolution est donc plus rapide
+subsS n'est pas directe, elle utilise des relations de transitivité contrairement a subs, ce qui nous permet 
+de definir des des relations qui ne sont pas explicite.
+donc vaut mieux choisir subs(A,B)
+
+

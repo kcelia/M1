@@ -1,0 +1,69 @@
+Voici le rapport du tme4:
+
+Exo 1 :
+
+Q2.i)
+L'annonce de a n'est vraie dans aucun monde du modèle et car :
+dans le monde (R,V,J) l'agent a sait que b possede la carte verte mais dans le monde ( R,J,V) acccessible depuis (R,V,J) par l'agent a,l'agent a ne sait pas que le joueur b possede la carte verte
+    idem pour tous les autre monde donc le logiciel retourne un modele vide. 
+    
+    
+Q2.ii)    Comme cette annonce est la négation de l'annonce précédente dont elle est vraie dans tous les mondes, le logiciel retourne le modèle initial.
+Cette annonce n'apporte aucune information supplémentaire pour changer le modèle.
+
+Q3.1)
+i) >> let model1 = upd_pa model0 (Kn b (Ng  holds_b_verte))
+ça se formule de la manière suivante : Kb (neg ( (V,J,R) ou (R,J,V))
+Dans les mondes (R,J,V) et (V,J,R) l'annonce est vraie, car l'agent b possede la carte jaune dans ces mondes là
+
+ii) let model2 = upd_pa model1 (Ng (Kn a holds_b_rouge))
+Cette formule se traduit de la manière suivante:
+Neg ( Ka ( ( J,R,V ) or (V,R,J) ) )
+
+L'annonce est fausse dans les mondes ( V R J ) car pour l'agent a c'est le seule monde disponible depuis lui meme, 
+donc Ka ( ( J,R,V ) or (V,R,J) ) est vraie, la négation de celle-ci est fausse 
+par conséquence, on supprime le monde (V R J ) et les relations associées a ce monde.
+
+iii)let model3 = upd_pa model2 (Kn a ( Ng  holds_a_jaune))
+Cette formule se traduit  de la manière suivante : 
+Ka ( not ( J V R ) or ( J R V ) ) 
+Cette formule est fausse J V R et ( J R V ) donc on les supprime dans le modèle et il nous reste que le monde  R V J qui devient un monde isolé
+On conclue que les trois annonces précédentes et le changement relié par chaque annonce:
+que a la fin tous les agents connaissent leur propre carte et la carte des autres agents 
+Q3.2)
+
+
+i) let model4 = upd_pa model0 (Kn c ( Ng  holds_c_jaune))
+
+Cette annonce est vraie dans tous les monde sauf les monde ( R V J ) et ( V R J ) car dans ces 2 vmonde l'agnet C possède la carte jaune donc il sait que il ne possède pas la carte jaune est fausse donc on supprime ces 2 mondes en conséquence de cette annonce.
+
+ii) let model5 = upd_pa model4 (Ng (Kn a (Kn b (holds_b_jaune))) )
+Cette annonce fausse dans le monde ( V J R ) et ( R J V ) Car dans ces deux mondes l'gent B possede la carte Jaune donc il sait qu'il possede la carte 
+dans chacun de ces deux mondes le seul monde accessible pour l'gent a est le monde lui même donc l'agent a sait que l'agent b sait qu'il possède la carte jeune 
+donc la formule est fausse dans ces deux mondes, ce qui nous amène a les supprimer du modele.
+
+iii) let model6 = upd_pa model5 (Kn c (Ng (holds_b_verte)))
+Cette formule se traduit de la manière suivante:
+Kc ( Ng ( J,V,R ) or (R,V,J) ) )
+Cette annonce est fausse dans tous les mondes du modèle 5 sauf pour le monde J R V 
+exemple dans le monde J V R:
+les mondes accessibles depuis le monde J V R par l'gent C est le monde lui meme, dans ce dernier, la formule ( J,V,R ) or (R,V,J) ) est vraie.donc sa negation est fausse,
+car on a la distribution  J V R des cartes 
+
+donc on supprime le monde J V R 
+Il ne reste plus que le monde isolé  J R V 
+On conclue que les trois annonces précédentes et le changement relié par chaque annonce:
+que a la fin tous les agents connaissent leur propre carte et la carte des autres agents 
+exo2:
+
+
+Q2 
+prenons l'agent A, 
+Ka (15,Mai) or ka (16,Mai) or ka (19,Mai) or
+ka (17,Juin) or ka (18,Juin) or  
+ka (14,Juillet) or ka (16,Juillet) or 
+ka (14,Aout)  or ka (15,Aout) or ka (17,Aout).
+
+Parmi ces 10 variable propositionnelle, mondes, on sait qu'une seule est vraie qui implique un OR exclusif, c-a-d, si 15 mai est vraie toutes les autres variables sont fausses et si Ka 15 mai est vraie, les autres sont fausses.    
+
+FIN.

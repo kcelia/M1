@@ -1,0 +1,38 @@
+Voici le compte rendu du TME3 : 
+
+exo2:
+
+La formule : 
+and not and not knows P not knows not knows P  not and  knows not knows P knows P
+est valide dans S5, on a également essayer de prouver la non satisfiablité de la négation de cette formule dans la logique S4 minlangage, on obtient que la négation de cette formule est satisfiable donc elle n'est pas valide dans la logique S4
+
+exo3:
+
+Après la construction du Modèle.
+On vérifie la question 2 de l'exo 4 du td: 
+on ajoute aux trois mondes la formule suivante : isItTrue or nec R1 A nec R1 not A et on vérifie la satisfiablité et on voit qu'elle est bien satisfiable dans les trois mondes donc la personne A sait toujours si elle a un papillon sur la tête ou pas car dans les trois mondes on a bien vérifié que la personne A sait a ou sait not a où a = La personne A  a un papillon sur la tête
+
+Pour la question 3 de l'exo 4, on verifie dans tous les trois mondes si la formule suivante est bien vérifiée :
+F = not ( KC c or KC not c) où c = La personne C a un papillon sur la tête.
+Selon la résultat obtenu par l’exécution de logiciel la formule F est bien verfiée dans le modèle M
+
+
+ Pour la question 3 de l'exo 3 de TME :
+ il faut vérifier la formule suivant
+ F = il existe au moins un monde dans le quelle G est vérifiée, 
+ où G = KB b or KB not B
+ 
+On ajoute la formule G dans les 3 mondes du modèle et on vérifie l’existence d'un monde dans le quelle F est vrai, et le monde w3 vérifie bien la formule G, car celle-ci ou la personne B peut voir le papillon sur la tête de la personne C, donc elle sait qu'elle a pas de papillon sur sa tete 
+ 
+
+ Pour la question 4 de l'exo 3 de TME :
+ Il faut vérifier la formule suivant
+ F = est-ce que dans tous les mondes possible on a G
+ où G = KA (not (KC c or Kc not c))
+ 
+ après l'exécution on obtient bien que la formule G est versifiée dans tous les mondes donc F est vraie 
+
+
+
+
+FIN

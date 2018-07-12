@@ -1,0 +1,94 @@
+Voici le compte rendu du TME2 : 
+
+
+
+
+exo 1 :
+
+Le modele1 :
+
+CreateNewNode w1
+CreateNewNode w2
+CreateNewNode w3
+CreateNewNode w4
+Link w1 w2 R
+Link w2 w3 R
+Link w3 w4 R
+Link w4 w3 R
+Link w4 w2 R
+Add w1 A
+Add w2 B
+Add w3 A
+Add w4 B
+
+Le modele2 :
+
+Add w1 isItTrue B
+Add w1 isItTrue A
+Add w1 isItTrue pos A
+Add w1 isItTrue nec B
+Add w4 isItTrue and nec B nec A
+Add w4 isItTrue and pos B pos A
+Add w4 isItTrue or nec B nec A
+Add w1 isItTrue nec pos B
+Add w3 isItTrue pos pos pos A
+Add w3 isItTrue nec nec nec A
+Add w2 isItTrue pos imp A nec B
+...
+
+1.2: 
+
+
+
+
+Nous avons modélisé un modèle minimal comportant 2 mondes, w1, w2, ces mondes ont été créé par les instructions :
+CreateNewNode w1
+CreateNewNode w2
+On ajoute les liens entre les mondes et les variables p et q:
+Link w1 w2 R
+Link w2 w2 R
+Add w1 Q
+Add w2 P
+Les deux contraintes se traduisent de la manière suivante :
+
+Add w1 isItTrue and not P nec pos P
+Add w1 isItTrue and Q pos not P
+
+Remarque : Pour la deuxième contrainte, n = 1, c-a-d, une seule modalité POS.
+Toutefois, le lien de w2 vers w2 (boucle de w2) nous garantie la satisfaction de cette contrainte pour un n quelconque.
+Après une exécution en mode step by step Lotrec la valide.
+
+exo3:
+Q3 :
+on formalise sous forme préfixe : imp nec imp P Q imp nec P nec Q
+
+on exécutant, step by step on constate que lotrec procède de la manière suivante :
+1/ il crée un monde dont la quelle la formule est inscrite
+2/ il réécrit l implication par une formule équivalente qui est : not( nec ( p->q) )  or ( nec p -> nec q ) 
+3/ il crée deux prémodèles 
+premodele 1 pour la formule not( nec ( p->q) )
+premodele 2 pour la formule  (nec p -> nec q )
+ 
+4/ il cherche a créer un modèle dans la quelle la formule 1 est vraie 
+ il est plus facile de créer des modèles a partir de pos que de nec et comme dans la formule 1 on a un not nec, qui est équivalent a pos not selon la règle du dualité de pos et not,
+ donc finalement on continue a créer une modèle dans la quelle (pos not (P imp Q)) est vrai
+
+ donc on ajoute un deuxième monde (car pour que pos F soit vrai il faut au moins un monde dans la quelle F est vrai ) puis  on essaye de la rendre vrai : not (P imp Q)
+et pour cela il suffit d'avoir P vrai et Q false dans ce deuxième monde,  on ne verifie pas la deuxime partie de OR de formule principale.
+
+finalement on est arrivé a construire un modele minimal dans le quel la  formule de départ est vrai
+-> F est satisfiable.
+
+
+
+Pour montrer la validité de la formule F il suffit de déterminer si la negation de F est insatisfiable donc F est valide 
+
+not F = not (imp nec imp P Q imp nec P nec Q)
+
+
+
+
+
+
+FIN
+

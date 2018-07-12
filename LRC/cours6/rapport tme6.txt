@@ -1,0 +1,55 @@
+Voici le rapport de l'exercice 1, je vous joins le fichier exo2.pl pour les fonctions en prolog de l'exercice 2 et 3.
+
+
+
+
+Exo1:
+
+- [A, [b,c], d] = [X].
+
+la liste [A, [b,c], d] contient 3 elements, la liste [X] contient un element, l'instruction [A, [b,c], d] = [X] retourne false, on ne peut pas faire d'unification en ayant des listes de tailles differentes.
+
+
+- [A, [B,C], D] = [X,Y,Z]. return true 
+X = A
+B = [b,c]
+Z= D
+
+- [a, [b,c], d] = [X,Y].
+False car la liste [a, [b,c], d] est de taille 3 et la liste [X,Y] a une taille de 2. 
+
+- [a, [b,c], d] = [a|L].
+Le premier element est : a et le premier element de notre liste est un : a 
+donc L = [[b, c], d]
+si on avait [b|L]
+
+- [a, [b,c], d] = [b|L].
+false.
+
+- [a, [b,c], d] = [X,Y].
+false.
+
+- [a, [b,c], d] = [X|Y].
+X = a 
+Y = [[b, c], d].
+
+J'avais aussi pensé a cette solution :
+X = [a,[b, c]]
+Y = d
+mais celle ci est fausse, car X est un element et il est le premier 
+
+- [a, [b,c], d] = [a,b|L].
+false.
+Car : 
+Le premier element de [a, [b,c], d] est a ce qui correspond bien au premier element [a,b|L] 
+Le deuxieme element de [a, [b,c], d] est [a,b] ce qui ne correspond pas au deuxieme element de [a,b|L] qui lui est b.
+
+- [a,b, [c,d]] = [a,b|L].
+L = [[c, d]].
+
+
+- [a,b, c,d | L1 ] = [a,b|L2].
+L2 = [c, d|L1].
+
+
+Fin.
