@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+  <title>Convergence en loi. </title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
+  <meta name="keywords" content="Convergence en loi" />
+  <link rel="stylesheet" media="screen" type="text/css" title="Ma page" href="../pagebase.css" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML"></script>
+</head>
+<body id="hautdelapage">
+<div id="chapitre">
+  <div class="centrageimage"> <img src="../Images/Logo.png" alt="le logo du site" /></div>
+  <h1 class="centragetexte">5. Propri&#x00e9;t&#x00e9;s limites.</h1>  
+</div>
+<div id="menu"> 
+  <a href="../index.html" title="Acc&#x00e9;der &#x00e0; la page.">Menu principal</a>.<br />
+  <a href="../Plan/observat.html" title="Acc&#x00e9;der &#x00e0; la page.">Sommaire g&#x00e9;n&#x00e9;ral du site</a>.
+  <h3>5. Propri&#x00e9;t&#x00e9;s limites.</h3>
+  <p>
+    5.1. <a href="conv_proba.html" title="Acc&#x00e9;der &#x00e0; la page.">Convergence en probabilit&#x00e9;</a>. \(\ast\)<br />	
+	5.2. <a href="loi_faible.html" title="Acc&#x00e9;der &#x00e0; la page.">Loi faible des grands nombres</a>.<br />
+	5.3. <a href="conv_ps.html" title="Acc&#x00e9;der &#x00e0; la page.">Convergence presque s&#x00fb;re</a>. \(\ast\)<br />
+	5.4. <a href="loi_forte.html" title="Acc&#x00e9;der &#x00e0; la page.">Loi forte des grands nombres</a>.<br />
+	5.5. <a class="ici" href="conv_loi.html" title="Acc&#x00e9;der &#x00e0; la page.">Convergence en loi</a>. \(\ast\)<br />
+	5.6. <a href="even_rare.html" title="Acc&#x00e9;der &#x00e0; la page.">Loi des &#x00e9;v&#x00e9;nements rares</a>.<br />
+	5.7. <a href="tlc.html" title="Acc&#x00e9;der &#x00e0; la page.">Th&#x00e9;or&#x00e8;me de la Limite Centrale</a>.<br />
+	5.8. <a href="stabilisation_variance.html" title="Acc&#x00e9;der &#x00e0; la page.">Stabilisation de la variance</a>.
+  </p>
+  <p>
+    <a href="../Biblio/refeABCD.html" title="Acc&#x00e9;der &#x00e0; la page.">R&#x00e9;f&#x00e9;rences bibliographiques</a>.<br />
+	<a href="../Notations/notationsABCD.html" title="Acc&#x00e9;der &#x00e0; la page.">Notations</a>.<br />
+	<a href="../CommandesR/commandesA.html" title="Acc&#x00e9;der &#x00e0; la liste.">Commandes de <span class="ital">R</span></a>.<br />
+	<a href="../Notions/notionsABCD.html" title="Acc&#x00e9;der &#x00e0; la page.">Index alphab&#x00e9;tique</a>.<br />
+	<a href="../Noms/nomsABCD.html" title="Acc&#x00e9;der &#x00e0; la page.">Index des Math&#x00e9;maticiens - Statisticiens</a>.
+  </p>
+  <hr />
+  <p>  
+    &#x00a9; Photis NOBELIS, 2009 &#x00e0;
+	<script type="text/javascript"> document.write((new Date()).getFullYear());</script>.<br />
+    Ancien Ma&#x00ee;tre de Conf&#x00e9;rences en Statistique de l'Universit&#x00e9; Louis Pasteur de Strasbourg. Je vous remercie de me <a href="mailto:photis@nobelis.eu" title="Envoyer un message"> signaler</a> toutes mes
+	omissions, erreurs, propositions d&#x2019;am&#x00e9;lioration du site, etc. Dans la mesure du possible, si mon temps le permet, je r&#x00e9;pondrai &#x00e9;galement &#x00e0; vos questions. 
+  </p>
+  <hr />
+  <a href="http://validator.w3.org/check?uri=referer" title="Acc&#x00e9;der au site d&#x2019;&#x00e9;valuation du XHTML"> <img src="../Images/valid-xhtml10-blue.png"  alt="XHTML Valid&#x00e9; !" /></a>
+</div>
+<div id="texte"> 
+  <h3>5.5. Convergence en loi. \(\ast\)</h3>
+  <p> 
+    Nous abordons le troisi&#x00e8;me type de convergence stochastique utilis&#x00e9;e dans ce site. Consid&#x00e9;rons une suite de <abbr title="variables al&#x00e9;atoires">v.a.</abbr> \(\lbrace X_n,\ n\in {\mathbb N}\rbrace\),
+	pas n&#x00e9;cessairement ind&#x00e9;pendantes, ni identiquement distribu&#x00e9;es, de <abbr title="fonction de r&#x00e9;partition">f.r.</abbr> \(F_n\), respectivement, ainsi qu&#x2019;une
+   <abbr title="variable al&#x00e9;atoire">v.a.</abbr> \(X\) de <abbr title="fonction de r&#x00e9;partition">f.r.</abbr> \(F_X\). 
+  </p>
+  <p>
+    <span class="gras">D&#xe9;finition 1.</span> <span class="ital">Nous disons que la suite \(\lbrace X_n,\ n\in {\mathbb N}\rbrace\) 
+	<span class="gras"><a href="../Notions/notionsABCD.html#C" title="Acc&#x00e9;der aux termes anglais, allemand et grec.">converge en loi</a></span> vers \(X\) si en tout point de continuit&#x00e9; \(t\in {\mathbb R}\) de
+	\(F_X(t)\), nous avons :</span>
+  </p>
+  \[
+    \lim_{n\rightarrow +\infty}F_n(t)=F(t).
+  \]
+  <p>
+    <span class="ital">Ceci est not&#x00e9; \(X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X\) ou encore \(\displaystyle\lim_{n\rightarrow+\infty}{\cal L}(X_n)={\cal L}(X)\).</span>
+  </p>
+  <p>
+    <span class="gras">Interpr&#x00e9;tation.</span> Cette notion de convergence peut se comprendre ais&#x00e9;ment dans la mesure o&#x00f9; ce sont les distributions qui convergent via leur
+	<abbr title="fonction de r&#x00e9;partition">f.r.</abbr> .
+  </p>
+  <p>
+    <span class="gras">Exemple 1.</span> Soit \(\lbrace Y_n,\ n\in {\mathbb N}\rbrace\) une suite de <abbr title="variables al&#x00e9;atoires">v.a.</abbr> ind&#x00e9;pendantes de m&#x00ea;me loi
+	<a href="../Lois/gamma.html#exponentielle" title="Acc&#x00e9;der &#x00e0; la d&#x00e9;finition.">Exponentielle</a> \({\cal GA}(1\ ;\ \beta)\). Nous posons \(X_n=\displaystyle\min_{i=1}^n Y_i=Y_{(1)}\). Des
+	<a href="../Lois/ordre.html#repartition" title="Acc&#x00e9;der &#x00e0; la propri&#x00e9;t&#x00e9;.">propri&#x00e9;t&#x00e9;s</a> de cette statistique nous d&#x00e9;duisons \({\cal L}(X_n)={\cal GA}(1\ ;\ n\beta)\). La
+	<abbr title="fonction de r&#x00e9;partition">f.r.</abbr> de cette loi satisfait &#x00e0; :	
+  </p>
+  \[
+    F_{X_n}(t)=\cases{
+        0 \quad {\rm  si} &amp;\(  t\leq 0,\) \cr
+        1-\exp(-n\beta t)\quad {\rm si} &amp;\( 0 &lt; t\),
+		}\qquad
+	\underset{n\rightarrow+\infty}\longrightarrow \qquad
+	\cases{
+        0 \quad {\rm  si} &amp; \( t\leq 0, \)\cr
+        1 \quad {\rm si} &amp; \(0 &lt; t\).
+		}
+  \]
+  <p>
+    Cette fonction n&#x2019;est pas une fonction de r&#x00e9;partition. La <abbr title="fonction de r&#x00e9;partition">f.r.</abbr> de la <abbr title="variable al&#x00e9;atoire">v.a.</abbr> d&#x00e9;finie par \(P(X=0)=1\) est
+	donn&#x00e9;e par :
+  </p>
+	\[
+    F_X(t)=\cases{
+        0 \quad {\rm  si} &amp; \( t &lt; 0,\) \cr
+        1 \quad {\rm si} &amp;\( 0 \leq t\).
+		}
+  \]
+  <p>
+	Nous constatons cependant que  \(\displaystyle\lim_{n\rightarrow +\infty}F_n(t)=F(t)\) en tout point de continuit&#x00e9; de \(F_X\),
+	c&#x2019;est-&#x00e0;-dire pour tout nombre r&#x00e9;el \(t \not=0\). Donc nous avons bien \(X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X\). \(\quad\square\)
+  </p>
+  <p>
+    <span class="gras">Remarque 1.</span> Si \(X\) est une <abbr title="variable al&#x00e9;atoire">v.a.</abbr> discr&#x00e8;te, pour montrer la convergence en loi il suffit de v&#x00e9;rifier : 
+  </p>
+  \[
+    P(X_n=x) \underset{n\rightarrow+\infty}\longrightarrow P(X=x),
+  \]
+  <p>
+    pour toutes les modalit&#x00e9;s \(x\) de \(X\).
+  </p>
+  <p>
+    Nous pr&#x00e9;sentons un deuxi&#x00e8;me crit&#x00e8;re de la convergence en loi fond&#x00e9; sur la convergence des fonctions
+	<a href="../Observat/variable_aleatoire.html#cara" title="Acc&#x00e9;der &#x00e0; la d&#x00e9;finition.">caract&#x00e9;ristiques</a>.
+  </p>
+  <p>
+    <span class="gras">Propri&#x00e9;t&#x00e9; 1.</span> <span class="ital">Nous supposons que la suite des fonctions caract&#x00e9;ristiques 	\(\lbrace c_n,\ n\in {\mathbb N}\rbrace\) des
+	<abbr title="variables al&#x00e9;atoires">v.a.</abbr> \(\lbrace X_n,\ n\in {\mathbb N}\rbrace\) converge vers une fonction \(c\), dont la partie r&#x00e9;elle est continue &#x00e0; l&#x2019;origine. Alors la fonction
+	\(c\) est la fonction caract&#x00e9;ristique d&#x2019;une <abbr title="variable al&#x00e9;atoire">v.a.</abbr> \(X\) et \(X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X\).</span>
+  </p>
+  <p>
+    <span class="gras">Propri&#x00e9;t&#x00e9; 2.</span> <span class="ital">La convergence en probabilit&#x00e9; implique la convergence en loi :</span>
+  </p>
+  \[
+    X_n\overset{P}{\underset{n\rightarrow+\infty}\longrightarrow}X\qquad \Longrightarrow \qquad X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X.
+  \]
+  <p>
+    <span class="gras">Remarque 1.</span> La r&#x00e9;ciproque est fausse. Consid&#x00e9;rons le contre-exemple qui suit. Soit les <abbr title="variables al&#x00e9;atoires">v.a.</abbr> \(\lbrace X_n,\ n\in {\mathbb N}\rbrace\)
+	et \(X\) d&#x00e9;finies de la mani&#x00e8;re suivante : \(\forall \omega \in\Omega,\quad \forall n\in {\mathbb N},\quad X_n(\omega)=1-X(\omega)\), avec \(P(X_n=0)=P(X_n=1)=0,5\). Nous avons ainsi pour tout
+	\(\omega \in\Omega,\quad \mid X_n(\omega)-X(\omega)\mid=1\), ce qui implique que pour tout \(0 &lt; \varepsilon&lt; 1\), nous avons \( \ P(\mid X_n-X\mid &gt; \varepsilon)=P(\mid X_n-X\mid =1)= 1\), qui ne tend pas vers
+	\(0\) quand \(n \rightarrow +\infty\) ; nous n&#x2019;avons donc pas la convergence en probabilit&#x00e9;. Cependant :
+  </p>
+   \[
+    F_{X_n}(t)= F_X(t)=\cases{
+        0\quad  {\rm  si} &amp; \( t&lt; 0\), \cr
+        0,5 \quad{\rm si} &amp;\( 0 \leq t &lt; 1\), \cr
+		1 \quad{\rm si}&amp;\( 1 \leq t\).
+		}
+  \]
+  <p>
+    Ce qui implique \(X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X\). \(\quad\square\)
+  </p>
+  <p id="propriete3">
+    <span class="gras">Propri&#x00e9;t&#x00e9; 3.</span> <span class="ital">Soit une suite de <abbr title="variables al&#x00e9;atoires">v.a.</abbr> \(\lbrace X_n,\ n\in {\mathbb N}\rbrace\) et une
+	<abbr title="variable al&#x00e9;atoire">v.a.</abbr> \(X\). Pour toute fonction continue \(h\), nous avons :</span>
+  </p>
+  \[
+    X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X\quad \Longrightarrow \quad h(X_n)\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}h(X).
+  \]
+  <p>
+    <span class="ital">En particulier, si \(X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X\), alors</span>
+  </p>
+  \[
+    \forall a\in {\mathbb R},\quad aX_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}aX\qquad {\rm et} \qquad 
+	P(X=0)=0 \quad\Longrightarrow \quad\frac{1}{X_n}\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}\frac{1}{X}.
+  \]
+  <p id="propriete4">
+    <span class="gras">Propri&#x00e9;t&#x00e9; 4.</span> <span class="ital">Soit une suite de <abbr title="vecteurs al&#x00e9;atoires">v.a.</abbr> \(\lbrace (X_n,\ Y_n),\ n\in {\mathbb N}\rbrace\), une
+	<abbr title="variable al&#x00e9;atoire">v.a.</abbr> \(X\) et \(a\in {\mathbb R}\) fix&#x00e9;. Nous supposons que :</span>
+  </p>
+  \[
+    X_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X \qquad {\rm et} \qquad  Y_n\overset{P}{\underset{n\rightarrow+\infty}\longrightarrow}a.
+  \]
+  <p>
+    <span class="ital">Alors, lorsque \(a=0\) :</span>
+  </p>
+  \[
+    X_n + Y_n\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}X \qquad {\rm et}\qquad X_nY_n\overset{P}{\underset{n\rightarrow+\infty}\longrightarrow}0.
+  \]
+  <p>
+	<span class="ital">De plus pour tout \(a\in {\mathbb R}\) et toute fonction continue \(h\) telle que \(h(a)\not=0\),
+	nous avons :</span>
+  </p>
+  \[
+    \frac{X_n}{h(Y_n)}\overset{{\cal L}}{\underset{n\rightarrow+\infty}\longrightarrow}\frac{X}{h(a)}.
+  \]
+  <p>
+    Remarquons que la somme deux suites de <abbr title="variables al&#x00e9;atoires">v.a.</abbr> qui convergent en loi, n&#x2019;est pas forc&#x00e9;ment convergente en loi.
+  </p>
+  <p>
+    <span class="gras">R&#x00e9;f&#x00e9;rences.</span> Des d&#x00e9;tails et une &#x00e9;tude plus approfondie sont donn&#x00e9;s, par exemple, dans l&#x2019;ouvrage de
+	<a href="../Biblio/refeEFGH.html#feller" title="Acc&#x00e9;der &#x00e0; la r&#x00e9;f&#x00e9;rence."> W. Feller</a> et l&#x2019;ouvrage de
+	<a href="../Biblio/refeEFGH.html#fourgeaud-fuchs" title="Acc&#x00e9;der &#x00e0; la r&#x00e9;f&#x00e9;rence.">C. Fourgeaud et A. Fuchs</a>.
+  </p>
+  <a href="#hautdelapage" title="Acc&#x00e9;der au d&#x00e9;but de la page.">Haut de la page</a>.
+</div>
+</body>
+</html>
