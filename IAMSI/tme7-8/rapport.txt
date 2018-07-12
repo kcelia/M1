@@ -1,0 +1,22 @@
+Exercice 2
+Le solveur donne un résultat identique à celui vu en TD
+Problèmes plus complexes : 
+- blockWorld-problem2.pddl : 14 étapes, time : 0.08s
+- blockWorld-problem3.pddl : 34 étapes, time = 67.36s
+On remarque pour le troisième probleme une augmentation du temps considérable.
+Exercice 3
+blocksSimp-domain.pddl
+blocksSimp-problem.pddl
+Exercice 4
+singe_bananes-domain.pddl
+singe_bananes-problem.pddl
+
+Exercice 5
+parserPDDL.py
+
+Exercice 6
+asp_strips.py
+main.py
+
+Commande sur terminal : 
+python3 main.py DOMAINEFILE PROBLEMFILE

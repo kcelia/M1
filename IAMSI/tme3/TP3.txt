@@ -1,0 +1,74 @@
+EXO3:
+
+
+On considere dans ce qui suit que  :
+tache rouge == rougeur
+, pustule == erruption cutanée
+ et amydales == gongllion.
+
+question 1-2: l'implementation en CLIPS est dans le fichier mycin.clp.
+question 3  : Il active la regle qui a le plus de premisse, en cas d'egalité il prend le fait plus recent.
+question 4  : clips utilise un chainage avant.
+
+question 5  : 
+
+CLIPS> (run)
+==> f-1     (rougeur patient)
+==> f-2     (peu_bouton patient)
+==> f-3     (froid patient)
+==> f-4     (forte_fievre patient)
+==> f-5     (douleur_yeux patient)
+==> f-6     (amydales_rouges patient)
+==> f-7     (peau_seche patient)
+==> f-8     (peau_pele patient)
+
+FIRE    2 R6etat_suspect: f-6,f-1,f-8 // comme dit precedamment il active la regle qui possede le plus de premisse, grace au fait 6,1,8 on obtient le fait 9
+==> f-9     (etat_suspect patient)
+FIRE    3 R9rougeole: f-9,f-4,*       // grace au fait 9, 4 et le not qui est vrai car le fait peu_fievre n'est pas present dans la BF on obtient le fait 10
+==> f-10    (rougeole patient)
+FIRE    4 R10Douleur1: f-5	      // ainsi de suite
+==> f-11    (douleur patient)
+FIRE    5 R5febrile: f-4
+==> f-12    (febrile patient)
+FIRE    6 R6febrile: f-3
+FIRE    7 R1Eruptioncutanee1: f-2
+==> f-13    (eruption_cutanee patient)
+FIRE    8 R3exantheme: f-13
+==> f-14    (exantheme patient)
+FIRE    9 R8rougeole: f-12,f-5,f-14,*
+FIRE   10 R4exantheme: f-1
+
+Donc CLIPS a activé les R6 R9 R10 R5 R6 R1 R3 R8 R4
+(FACTS)
+f-0     (initial-fact)
+f-1     (rougeur patient)
+f-2     (peu_bouton patient)
+f-3     (froid patient)
+f-4     (forte_fievre patient)
+f-5     (douleur_yeux patient)
+f-6     (amydales_rouges patient)
+f-7     (peau_seche patient)
+f-8     (peau_pele patient)
+f-9     (etat_suspect patient) 		// fait ajouté
+f-10    (rougeole patient)		// fait ajouté
+f-11    (douleur patient)		// fait ajouté
+f-12    (febrile patient)		// fait ajouté
+f-13    (eruption_cutanee patient)	// fait ajouté
+f-14    (exantheme patient)		// fait ajouté
+
+For a total of 15 facts.
+CLIPS  a ajouté 6 faits 
+
+question 6 : On conclu que la maladie diagnostiquée est la rougeole 
+chainage arriere du but : rougeole, joint en image.
+
+
+le but rougeole : les regles R8 et R9 sont toutes les deux activables. 
+ --- regle activée : R5 R3 R7 R8 ou R7 R6 R9 
+
+precedemment on a activé : R6 R9 R10 R5 R6 R1 R3 R8 R4 soit 9 regles
+avec un chainage arriere on aurait peu activé soit R7 R6 R9, soit 3 regles ou au plus  R5 R3 R7 R8 soit 4 regles 
+on remarque qu'avec un chainage arriere du but on a moins de regle activé qu'un chainage avant.
+
+
+

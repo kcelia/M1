@@ -1,0 +1,6 @@
+(define (problem blockProblem)
+	(:domain blockWorld)
+	(:objects A B C D - block)
+	(:init (clear B) (on A table) (on B A) (clear C) (on D table) (on C D))
+	(:goal (and (on A B) (on B C) (on C D) (on D table) (clear A)))
+)

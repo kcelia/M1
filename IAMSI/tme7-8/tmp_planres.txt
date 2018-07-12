@@ -1,0 +1,11 @@
+clingo version 4.5.4
+Reading from tmp_plan.lp
+Solving...
+Answer: 1
+perform(seDeplace(a,c),0) perform(prend(caisse,bas,c),1) perform(seDeplace(c,b),2) perform(depose(caisse,b,bas),3) perform(monteCaisse(b),4) perform(prend(bananes,haut,b),5)
+SATISFIABLE
+
+Models       : 1+    
+Calls        : 1
+Time         : 0.031s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.020s
