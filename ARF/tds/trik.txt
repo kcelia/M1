@@ -1,0 +1,66 @@
+terminal conda 
+
+conda install mysql-python 
+
+
+
+
+
+
+
+
+
+
+
+pk du non supervisé :
+profiling 
+regrouper les exemples dans des paquets coherent 
+probleme du manque de label 
+pk on a besoin du non supervisé detecter tous les images du monde va couter tres cher 
+profil pas acces au label 
+dans le profiling (regrouper un nombre d user par un centre d interet ) 
+on ne peut pas le faire car on ne connait pas leur comportement 
+
+kmean hard clustering 
+EM soft 
+intra cluster le plus petyit possible 
+baricentre = ùoyenne 
+long ? non pas bcp de tour pour conver meme si carré moins long que les neuronnes 
+choix du k 
+init si convexe ou pas  donc on relance "bootstrap" pleiiiiiiin de fois on prends le meilleur et on continue 
+fonction de coup si change le nbr de cluster 
+comparer la ofnction non, elle decroit choix du k 
+qd elle ne decroit plus je casse c ke j ai un point qui ne m intesresse pas 
+
+
+si j ajoute une donnée on peut les ajouter au cluster , cest un modele 
+compression de donnée
+
+
+une dim variance = sigma 
+multidim
+
+
+semi super peu de point labeler vs bcp de point non label 
+
+
+matrice de transformation affine sigma, comment tourner ma gaussienne de maniere indep 
+
+
+
+arbre complet trop gros 
+
+
+
+
+
+relaxation et pas calcule execte, probleme np complet , 
+approxiamation faite en : 
+coupe minimal kd  vecteur dans -1 1f'df = 1 que tous les osmmets soit selec 
+
+
+
+
+
+
+
