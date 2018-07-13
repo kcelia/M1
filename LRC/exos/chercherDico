@@ -1,0 +1,38 @@
+motTrouRef( [_ , m ,  _ , r , _ ,_] ).
+
+prefix([],L1).
+prefix( [X|L1],[X|L2]) :- prefix(L1,L2).
+
+chercherDico(M,[] ,[] ).
+chercherDico(M,[L|L1],[L|L2] ) :- prefix(M,L), chercherDico(M,L1, L2).
+chercherDico(M,[L|L1],L2 ) :- not(prefix(M,L)), chercherDico(M,L1, L2).
+
+
+
+
+
+dernier1([X],X).
+dernier1([_|L],X) :- dernier1(L,X).
+
+pas_vide(L):- L \= [].
+
+
+valeurPossible(X,PREF,DICO,ALPHABET,NEWPREF) :- member(X,ALPHABET) ,append(PREF,[X],NEWPREF) ,chercherDico(NEWPREF,DICO,RES) , pas_vide(RES).
+
+
+est_dans(X,[Y]) :- X=Y.
+est_dans(X,[Y|L]) :- X=Y.
+est_dans(X,[Y|L]) :- X\=Y, est_dans(X,L).
+
+
+supprime([],_,[]).
+supprime([X|L1],X,L2) :- supprime(L1,X,L2).
+supprime([T|L1],X,[T|L2]) :- T \= X,supprime(L1,X,L2).
+
+
+ed( [] , [] ).
+ed( [X|L], L2 ):- est_dans(X,L2), supprime( L2,X,R), ed( L,R). 
+
+remplit( RES, [X], ALPHA ):- prefix(RES,X ).
+remplit( RES, [X|DICO], ALPHA ):- prefix( RES,X ), ed( RES, ALPHA).
+remplit( RES, [X|DICO], ALPHA ):- not(prefix( RES,X )), remplit(RES, DICO, ALPHA ).

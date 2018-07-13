@@ -1,0 +1,289 @@
+TP 7
+
+Exercice 1
+
+subs(chat, felin).
+subs(lion, felin).
+subs(canide, chien).
+subs(chien, canide).
+subs(souris, mammifere).
+subs(felin, mammifere).
+subs(canide, mammifere).
+subs(mammifere, animal).
+subs(canari, animal).
+subs(animal, etreVivant).
+subs(and(animal, plante), nothing).
+subs(and(animal, some(aMaitre)), pet).
+subs(animal, some(aMaitre)).
+subs(some(aMaitre), all(aMaitre, humain)).
+subs(chihuahua, and(chien, pet)).
+subs(carnivoreExc, all(mange, animal)).
+subs(herbivoreExc, all(mange, plante)).
+subs(lion, carnivoreExc).
+subs(carnivoreExc, predateur).
+subs(animal, some(mange)).
+subs(and(all(mange,nothing), some(mange)), nothing).
+
+Exercice 2
+
+1.
+
+Ces règles traduisent une récursion sur l'inclusion.
+
+2.
+
+subsS1(canari,animal).
+true .
+
+et
+
+subs(canari, animal).
+true.
+
+subsS1(chat,etreVivant).
+true .
+
+alors que ci-dessous ne marche pas
+
+subs(chat,etreVivant).
+false.
+
+3.
+
+subsS1(chien, souris).
+
+Tourne en boucle et ne s'arrête pas !
+
+4.
+
+subsS(canari,animal).
+true .
+
+ subsS(chat, etreVivant).
+true .
+
+subsS(chien, canide).
+true .
+
+subsS(chien, chien).
+true .
+
+5.
+
+subsS(souris, some(mange)).
+true .
+
+subsS(lion, all(mange, animal)).
+true .
+
+Ceci marche car le "il existe" est un quantifieur existenciel non qualifié.
+
+6.
+
+subsS(chat, humain).
+false.
+
+subsS(chien, souris).
+false.
+
+7.
+
+subsS(chat, X).
+X = chat ;
+X = felin ;
+X = mammifere ;
+X = animal ;
+X = etreVivant ;
+X = some(aMaitre) ;
+X = some(mange) ;
+X = all(aMaitre, humain) ;
+
+subsS(X, mammifere).
+X = mammifere ;
+X = souris ;
+X = felin ;
+X = canide ;
+X = chat ;
+X = lion ;
+X = chien ;
+
+En effet, pour la première on nous retourne tout ce que subsume chat et pour la seconde tout ce qui est subsumé par mammifere.
+
+8.
+
+subs(A, B):- equiv(A, B).
+subs(B, A):- equiv(A, B).
+
+modification:
+equiv(chien, canide).
+equiv(carnivoreExc, all(mange, animal)).
+equiv(herbivoreExc, all(mange, plante)).
+
+9.
+
+subsS(lion, all(mange, animal)).
+true .
+
+10.
+
+Il est préférable d'utiliser "subs" car il s'agit d'une requête atomique et terminale. La résolution est donc plus rapide.
+
+exercice 3
+
+1.
+
+subsS(chihuahua, and(mammifere, some(aMaitre))).
+true .
+
+subsS(and(chien, some(aMaitre)), pet).
+true .
+
+subsS(chihuahua, and(pet, chien)).
+true
+
+2.
+
+subsS(C, and(D1, D2), L) :- D1\=D2, subsS(C, D1, L), subsS(C, D2, L).
+
+-> cas où C est subsumé par une intersection de concepts.
+-> Ca ne marcherait pas pour : subsS(chihuahua, and(pet, chien))
+
+subsS(C, D, L) :- subs(and(D1, D2), D), E=and(D1, D2), not(member(E,L)), subsS(C, E, [E|L]), E\==C.
+
+-> regarde si D subsume une intersection qui n'est pas contenu dans L et réalise la subsemption de C par cette intesection en ajoutant E à L (E différent de C).
+-> 
+
+subsS(and(C, C), D, L) :- nonvar(C), subsS(C, D, [C|L]).
+
+->regarde si C n'est pas une variable libre de la subsomption de D par C, ie un concept non défini
+-> subsS(and(chien, chien), canide)
+
+subsS(and(C1, C2), D, L) :- C1\=C2, subsS(C1, D, [C1|L]).
+
+->regarde si C1 est différent de C2 puis si C1 est subsume par D car si C1 est subsume par D alors l'intersection de C1 et C2 est subsumé par D aussi
+->subsS(and(chien, chat), mammifere).
+
+subsS(and(C1, C2), D, L) :- C1\=C2, subsS(C2, D, [C2|L]).
+
+->même chose que précédemment, on regarde si C2 est subsumé par D
+->subsS(and(plante, chien), mammifere)
+
+subsS(and(C1, C2), D, L) :- subs(C1, E1), E=and(E1, C2), not(member(E, L)), subsS(E, D, [E|L]), E\==D.
+
+->Pour prouver C1 inter C2 subsumés par D on montre que C1 subsumé par E1 et que E1 inter C2 subsumés par D
+->subs(and(lion, plante), nothing).
+false.
+Au contraire de :
+subsS(and(lion, plante), nothing).
+true .
+
+subsS(and(C1, C2), D, L) :- Cinv=and(C2, C1), not(member(Cinv, L)), subsS(Cinv, D, [Cinv|L]).
+
+->on regarde si l'intersection de C1 et C2 n'est pas comprise dans L et on vérifie la subsomption de cette intersection par D
+
+3.
+
+subsS(and(carnivoreExc, etreVivant),mammifere ).
+false.
+
+L'exemple ci-dessus ne marche pas, alors tous les cas ne sont pas pris en compte.
+
+
+exercice 4
+
+1.
+
+subsS(all(R,C), all(R,D),_) :- subsS(C, D).
+subsS(all(R,C),D,_):- subs(D,all(R,E)), subsS(all(R,C), all(R,E),_).
+
+2.
+
+subsS(lion,all(mange,etreVivant)).
+true .
+
+subsS(all(mange,canari),carnivoreExc).
+true 
+
+3.
+
+subsS(and(C1, C2), all(R, D),_) :- subsS(C1,all(R,E)), subsS(C2, all(R,L)), subsS(and(E,L),D).
+
+subsS(and(carnivoreExc, herbivoreExc), all(mange,nothing)).
+true .
+
+subsS(and(and(carnivoreExc,herbivoreExc),animal),nothing).
+true .
+
+subsS(and(and(carnivoreExc, animal), herbivoreExc), nothing).
+true .
+
+Dans notre cas, la requête ci-dessus fonctionne.
+
+4.
+
+inst(felix,chat).
+inst(tom, chat).
+inst(pierre, humain).
+inst(princesse, chihuahua).
+inst(marie, humaine).
+inst(jerry, souris).
+inst(titi, canari).
+instR(felix, mange, jerry).
+instR(felix, mange, titi).
+instR(tom, mange, and(titi, jerry)).
+instR(princesse, aMaitre, marie).
+instR(felix, aMaitre, pierre).
+
+On a remarqué une ambigüté dans l'énoncé, on ne savait pas si félix pouvait manger titi seulement et pas jerry ou s'il était "forcé" de manger les deux en même temps, on a donc créé un chat tom pour vérifier les deux cas.
+
+subsS(A, B, _) :- inst(A,C), subsS(C,B). 
+subsS(A, all(B, C), _) :- instR(A, B, C).
+subsS(A, all(B, C), _) :- C=and(D, F), instR(A, B, D), instR(A, B, F).
+subsS(A, all(B, C), _) :- instR(A, B, and(C, D)), C\==D.
+
+ subsS(felix, all(mange, titi)).
+true .
+
+subsS(tom, all(mange, and(titi, jerry))).
+true .
+
+subsS(tom, all(mange, titi)).
+true.
+
+ subsS(felix, all(mange, and(titi, jerry))).
+true .
+
+5.
+
+Non car si l est vrai pour tous, c'est aussi vrai pour une instance particulière.
+
+subsS(tom, some(mange)).
+true .
+
+6.
+
+subsS(lion, X).
+X = lion ;
+X = felin ;
+X = carnivoreExc ;
+X = mammifere ;
+X = animal ;
+X = etreVivant ;
+X = some(mange) ;
+X = predateur ;
+X = all(mange, animal) ;
+X = all(mange, etreVivant) ;
+X = all(mange, some(mange)) ;
+
+subsS(X, predateur).
+X = predateur ;
+X = carnivoreExc ;
+X = lion ;
+X = all(mange, animal) ;
+X = and(lion, carnivoreExc) ;
+X = and(lion, predateur) ;
+X = and(lion, all(mange, animal)) ;
+X = and(carnivoreExc, predateur) ;
+X = and(carnivoreExc, all(mange, animal)) ;
+X = and(all(mange, animal), carnivoreExc) ;
+X = and(all(mange, animal), predateur) ;

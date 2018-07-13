@@ -1,0 +1,75 @@
+
+exo4):
+
+2a)
+?- subs(canaris,animal).
+true.
+
+
+
+
+
+?- subs(chat,vivant).
+true.
+
+Par transitivité de 
+subs(chat,felin) puis subs(felin,mammifer) puis subs(mammifer,animal).subs(animal,vivant).
+
+?- subsS1(chien,souris).
+Le programme boucle infinement 
+a cause des lignes :
+subs(chien,canides).
+subs(canides,chien).
+comme chien est different de souris, on applique la regle suivante :
+subsS1(A,E):-subs(A,D),subsS1(D,E),A\==D,D\==E, A\==E.
+subs(A,D) on a : A = chien, D = canides
+prolog cherche subsS1(canides,E) et le seul E qui le satisfait est E = chien ce qui genere une boucle infine.
+
+avec le teste ?- subsS(chien,souris). on obtient false.
+car :
+comme chien est different de souris, on applique : subsS(C,D) :- subsS( C,D, [D]).
+c-a-d, on fait appel a la regle subsS avec trois elemnts C= chien, D= souris, [D] = [souris]
+on applique subsS(C,D,L) :- subs(C,E), not(member(E,L)),subsS(E,D,[E|L]),E\==D.
+le seul E qui l'a satisfait subs(C,E) est canides, avec cette valeur, a deuxieme condition est satisfaite car canides n'est pas dans liste, finalement on cherche subsomption de canides et souris en ajoutant canides a la liste.
+il n'y a aucun D qui satisfait la regle subsS(E,D,[E|L]) car la seule relation subs( canides , D ), D = chien et chien est la liste L donc on obtient false au lieux de boucler comme dans la regle precedente.
+
+?- subsS(canaris,animal,_).
+true ;
+false.
+
+
+
+?- subsS(chat,vivant).
+true ;
+false.
+
+
+
+?- subsS(chien,canides).
+true ;
+false.
+
+
+
+?- subsS(chien,chien).
+true ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

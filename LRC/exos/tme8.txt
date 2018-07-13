@@ -1,0 +1,30 @@
+?- chercherDico([a,m,e,r],[[a,m,i,r,a,l],[a,m,i,c,a,l],[a,m,o,r,a,l]],R ).R = [] .
+
+
+?- valeurPossible(X,[a,m,i],[[a,m,i,r,a,l], [a,m,i,c,a,l], [a,m,o,r,a,l] ] , [a,m,i,l,o],L ).
+false.
+
+?- valeurPossible(r,[a,m,i],[[a,m,i,r,a,l], [a,m,i,c,a,l], [a,m,o,r,a,l] ] , [a,m,i,r,l,c,o],L ).
+L = [a, m, i, r] ;
+
+?- valeurPossible(d,[a,m,i],[[a,m,i,r,a,l], [a,m,i,c,a,l], [a,m,o,r,a,l] ] , [a,m,i,r,l,c,o],L ).
+false.
+
+?- valeurPossible(X,[e],[[a,m,i,r,a,l], [a,m,i,c,a,l], [a,m,o,r,a,l] ] , [a,m,i,r,l,c,o],L ).
+false.
+
+
+remplit( MT, Dico
+
+swipl
+
+
+Question 
+fonction est dans 
+L = [a] ;
+L = [a|_G2762] ;
+
+
+remplit( [t,X,t,Y], [ [t,a,t,a], [t,o,t,o], [t,u,t,u] ,[t,o,t,a] ], [t,a,o,l] ).
+
+valeurPossible(_,[a,m,i],[ [t,a,t,a], [t,o,t,o], [t,u,t,u] ,[t,o,t,a] ], [t,a,o,l] ,L ).

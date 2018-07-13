@@ -1,0 +1,131 @@
+﻿
+exercice 3
+
+1.
+
+subsS(chihuahua, and(mammifere, some(aMaitre))).
+true .
+
+subsS(and(chien, some(aMaitre)), pet).
+true .
+
+subsS(chihuahua, and(pet, chien)).
+true
+
+2.
+
+
+3.
+subsS(and(carnivore, etreVivant),mammifere ).
+false
+Donc tous les cas ne sont pas pris en compte.
+
+
+exercice 4
+
+1.
+
+subsS(all(R,C), all(R,D),_) :- subsS(C, D). /*s'il y a une subsomption direct*/
+subsS(all(R,C),D,_):- subs(D,all(R,E)), subsS(all(R,C), all(R,E),_).
+
+
+
+
+
+2.
+
+subsS(lion,all(mange,etreVivant)).
+true .
+
+subsS(all(mange,canari),carnivoreExc).
+true 
+
+3.
+
+subsS(and(C1, C2), all(R, D),_) :- subsS(C1,all(R,E)), subsS(C2, all(R,L)), subsS(and(E,L),D).
+
+
+subsS(and(carnivore, herbivore), all(mange,nothing)).
+true .
+
+subsS(and(and(carnivore,herbivore),animal),nothing).
+true .
+
+subsS(and(and(carnivore, animal), herbivore), nothing).
+true .
+
+Dans notre cas, la requête ci-dessus fonctionne.
+
+4.
+
+inst(felix,chat).
+inst(pierre, humain).
+inst(princesse, chihuahua).
+inst(marie, humaine).
+inst(jerry, souris).
+inst(titi, canari).
+instR(felix, mange, jerry).
+instR(felix, mange, titi).
+instR(princesse, aMaitre, marie).
+instR(felix, aMaitre, pierre).
+
+
+subsS(A, B, _) :- inst(A,C), subsS(C,B). 
+subsS(A, all(B, C), _) :- instR(A, B, C).
+subsS(A, all(B, C), _) :- C=and(D, F), instR(A, B, D), instR(A, B, F).
+subsS(A, all(B, C), _) :- instR(A, B, and(C, D)), C\==D.
+
+subsS(felix, all(mange, titi)).
+true .
+
+
+subsS(felix, all(mange, and(titi, jerry))).
+true .
+
+
+5.
+
+Non car si l est vrai pour tous, c'est aussi vrai pour une instance particulière.
+
+subsS(jerry, some(mange)).
+true .
+
+6.
+
+subsS(lion, X).
+X = lion ;
+X = felin ;
+X = carnivoreExc ;
+X = mammifere ;
+X = animal ;
+X = etreVivant ;
+X = some(mange) ;
+X = predateur ;
+X = all(mange, animal) ;
+X = all(mange, etreVivant) ;
+X = all(mange, some(mange)) ;
+
+subsS(X, predateur).
+X = predateur ;
+X = carnivoreExc ;
+X = lion ;
+X = all(mange, animal) ;
+X = and(lion, carnivoreExc) ;
+X = and(lion, predateur) ;
+X = and(lion, all(mange, animal)) ;
+X = and(carnivoreExc, predateur) ;
+X = and(carnivoreExc, all(mange, animal)) ;
+X = and(all(mange, animal), carnivoreExc) ;
+X = and(all(mange, animal), predateur) ;
+
+
+
+
+
+
+
+
+
+
+
+
