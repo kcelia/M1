@@ -1,0 +1,387 @@
+
+
+-- ===================
+-- 3I009 2017
+-- ===================
+
+-- Compte rendu du TME 4-5 sur les plan d'exécution
+-- ================================================
+
+-- NOM, Prénom 1 : BOURMAUD
+-- NOM, Prénom 2 : MARCHAL
+
+
+-- Préparation : création de la relation Annuaire
+-- ===========
+@vider
+@annuaire
+
+@liste
+
+-- schéma des relations :
+desc Annuaire
+desc BigAnnuaire
+
+
+select count(*) as nb_personnes from BigAnnuaire;
+
+
+
+
+-- Question préliminaire: Statistiques sur les tables
+-- ==================================================
+
+explain plan for
+    select * from Annuaire;
+@p3
+
+-- On voit qu'il découpe la requete en 2 parties, la sélection et l'acces à la table -> 2000
+
+
+explain plan for
+    select * from BigAnnuaire;
+@p3
+
+-- idem -> 220K
+
+explain plan for
+    select distinct nom from BigAnnuaire;
+@p3
+
+--On voit qu'il découpe la requete en 3 parties, la sélection, le hash et l'acces à la table -> 100
+-- 2. Il sélectionne 220K colonne en accédant à la table
+-- 1. Il ne garde que les 100 nom unique (distinct)
+-- 0. Retourne les 100 résultats
+
+explain plan for
+    select distinct prenom from BigAnnuaire;
+@p3
+--idem -> 90
+
+explain plan for
+    select distinct age from BigAnnuaire;
+@p3
+
+-- idem -> 100
+
+
+explain plan for
+    select distinct cp from BigAnnuaire;
+@p3
+
+-- cp : code postal
+-- idem -> 1000
+
+explain plan for
+	select min(population), max(population)
+from Ville;
+@p3
+--On voit qu'il découpe la requete en 3 parties, la sélection, le sort et l'acces à la table -> 1
+--2. accede à la table -> 1000
+--1. trie la table et sélectionne le premier et le dernier élement
+--0. retourne le résultat
+
+-- =================================
+-- Exercice 1 : Sélection avec index
+-- =================================
+
+-- a)
+explain plan for
+    select a.nom, a.prenom
+    from BigAnnuaire a
+    where a.age = 18;
+@p3
+--listeRowids = IndexAge.getRowID(18)
+--foreach(r:listeRowids){
+--	p=Personne.lire(r)
+--	afficher(p.nom, p.prenom)
+--}
+--avec Personne est une TABLE
+--     	IndexAge est un INDEX
+
+
+-- b)
+explain plan for
+    select a.nom, a.prenom
+    from BigAnnuaire a
+    where a.age between 20 and 29;
+@p3
+--for(i=20;i<=29;i++){
+--listeRowids +=  IndexAge.getRowID(i)
+--}
+--foreach(r:listeRowids){
+--	p=Personne.lire(r)
+--	afficher(p.nom, p.prenom)
+--}
+--avec Personne est une TABLE
+--     	IndexAge est un INDEX
+
+
+-- c)
+explain plan for
+   select a.nom, a.prenom
+   from BigAnnuaire a
+   where a.age < 70 and (a.cp = 93000 or a.cp = 75000);
+@p3
+
+--for(c in [75000,93000]){
+--	listeRowids = IndexCP.getRowID(c)
+--	foreach(r:listeRowids){
+--		p=Personne.lire(r)
+--		if(p.age<70){
+--			afficher(p.nom, p.prenom)
+--			}
+--		}
+--}
+
+--avec Personne est une TABLE
+--     	IndexCP est un INDEX
+
+
+-- d)
+explain plan for
+    select a.nom, a.prenom
+    from BigAnnuaire a
+    where a.age = 20 and a.cp = 13000 and a.nom like 'T%';
+@p3
+--listeRowidsA = IndexAge.getRowID(20)
+--listeBitmapA = Bitmap.conversion(listeRowidsA)
+--listeRowidsCP = IndexCP.getRowID(13000)
+--listeBitmapCP = Bitmap.conversion(listeRowidsCP)
+--listeBitmap = Bitmap.and(listeBitmapA, listeBitmapCP)       (intersection)
+--listeRowids = Bitmap.conversion(listeBitmap)
+--foreach(r:listeRowids){
+--	p=Personne.lire(r)
+--	if(p.nom="^T"){
+--		afficher(p.nom, p.prenom)
+--	}
+--}
+--avec Personne est une TABLE
+--     	IndexAge est un INDEX
+--	IndexCP est un INDEX
+--	Bitmap est une classe permettant de faire des opérations entre 2 TABLES
+
+-- Exercice 2: Sélection AVEC/SANS index
+-- =====================================
+
+-- a)
+explain plan for
+    select a.nom, a.prenom
+    from BigAnnuaire a
+    where a.age <= 100;
+@p4
+
+--COMPLETER
+--Prédicat	Rows	Index utilisé	Cout
+--age<=10	22200	oui   		22252
+--age<=20	44422	oui		44521
+--age<=30	66644	oui		66793
+--age<=40	88867	non		70893
+--age<=60	133K	non		70893
+--age<=100	220K	non		70893
+--b)Il préfère ne pas utiliser l'IndexAge à partir de <=40 car au dessus de 40 le coùt serait superieur en utilisant un index que sans 
+
+
+
+-- c)
+explain plan for
+    select a.nom, a.prenom
+    from BigAnnuaire a
+    where a.cp BETWEEN 50000 AND 60000;
+@p4
+
+explain plan for
+    select a.nom, a.prenom
+    from BigAnnuaire a
+    where a.cp BETWEEN 50000 AND 90000;
+@p4
+-- On remarque qu'au dela d'environ 90000, oracle utilise plus l'index IndexCP car avec IndexCP, oracle accède au plus petit élément de l'intervalle vérifiant la requête et fait ensuite un parcourt latéral. Cependant à partir d'un intervalle trop grand([50000,90000]), il fait un filter(cp>=50000 and cp<=90000) sur toute la table.
+--L'intervalle devient trop grand lorsque le nombre de ligne sélectionné avec l'index est superieur au nombre total de page. 
+
+
+
+-- Exercice 3. Comparaison de plans d'exécutions équivalents
+-- =========================================================
+explain plan for
+   SELECT /*+  index( a IndexAge) */ a.nom, a.prenom 
+   FROM BigAnnuaire a WHERE a.age < 7;
+@p4
+--cost : 13365
+
+explain plan for
+   SELECT /*+  no_index( a IndexAge) */   a.nom, a.prenom
+   FROM BigAnnuaire a WHERE a.age < 7;
+@p4
+--cost : 70893
+explain plan for
+   SELECT  a.nom, a.prenom
+   FROM BigAnnuaire a WHERE a.age < 7;
+@p4
+--cost : 13365, oracle choisit bien la solution la moins couteuse
+
+-- b)
+explain plan for
+   SELECT /*+  index( a IndexAge) */ a.nom, a.prenom 
+   FROM BigAnnuaire a WHERE a.age >19;
+@p4
+--cost : 180K
+--Avec une indexation à 180K lignes soit 180K index cela ne coute pas trés cher (354) cependant pour chaque index il doit acceder à une page et la lire en entier pour trouver la bonne valeur, ce qu'il fait qu'il lit plusieurs fois la meme page, ce qui peut rendre l'action plus couteuse que de lire une par une toutes les pages (acition sans indexation)
+
+
+explain plan for
+   SELECT /*+  no_index( a IndexAge) */   a.nom, a.prenom
+   FROM BigAnnuaire a WHERE a.age >19;
+@p4
+--cost : 70893
+
+
+explain plan for
+   SELECT  a.nom, a.prenom
+   FROM BigAnnuaire a WHERE a.age >19;
+@p4
+--cost : 70893, oracle choisit bien la solution la moins couteuse
+
+
+--c)
+explain plan for
+    select /*+ index(a IndexAge) index(a IndexCp)  */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+--cout : 221
+
+explain plan for
+    select /*+ no_index(a IndexAge) no_index(a IndexCp)  */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+--cout : 70893
+
+explain plan for
+    select /*+ index(a IndexAge) no_index(a IndexCp)  */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+--cout : 2206
+--On voit qu'en utilisant qu'un index IndexAge le cout est superieur  au cout de la requête lorsqu'on lui permettait d'utiliser l'index qu'il souhaitait parmis indexAge et indexCP, cela signifie qu'il n'a probablement pas utilsé indexAge.
+
+explain plan for
+    select /*+ no_index(a IndexAge) index(a IndexCp)  */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+--cout : 221
+--On voit qu'en utilisant qu'un index IndexCP le cout est égal  au cout de la requête lorsqu'on lui permettait d'utiliser l'index qu'il souhaitait parmis indexAge et indexCP, cela signifie qu'il a probablement utilsé indexCP.
+
+explain plan for
+    select a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+--cout : 10
+--On remarque que le cout est encore inférieur au cout des requêtes précédentes, peut être qu'oracle à utilisé les deux index.
+
+explain plan for
+    select /*+ index_combine(a IndexAge IndexCp)  */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+--cout : 10
+--On voit qu'en combinant les deux index on retrouve le même cout que lorsque qu'on ne donnait directive à oracle.
+
+explain plan for
+    select /*+ index_join(a IndexAge IndexCp)  */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+--cout : 10
+--idem qu'à la requête précédente.
+
+-- Exercice 4: Jointure avec index
+-- ==================================
+
+-- a) avec le "petit" Annuaire
+explain plan for
+    select a.nom, a.prenom, v.ville
+    from Annuaire a, Ville v
+    where a.cp = v.cp
+    and a.age=18;
+@p3
+
+--listeRowidsA = IndexAge.getRowID(18)
+--foreach(r:listeRowids){
+--	p=Personne.lire(r)
+--	pA=enregistrer(p.nom, p.prenom,p.cp)
+--}
+--foreach(pa:pA){
+--	foreach( pV:Ville){
+--		if(pa.cp == pV.cp){
+--			 afficher( pa.nom,pa.prenom,pV.ville)
+--		}
+--	}
+--}
+--avec Personne est une TABLE
+--     Ville est une TABLE
+--     IndexAge est un INDEX
+--
+
+-- b) avec BigAnnuaire
+explain plan for
+    select a.nom, a.prenom, v.ville
+    from BigAnnuaire a, Ville v
+    where a.cp = v.cp
+    and a.age=18;
+@p3
+--listeRowidsA = IndexAge.getRowID(18)
+--foreach(r:listeRowids){
+--	p=Personne.lire(r)
+--	pA=enregistrer(p.nom, p.prenom,p.cp)
+--}
+--foreach(pV:Ville){
+--	foreach( pa:pA){
+--		if(pV.cp == pa.cp){
+--			 afficher( pa.nom,pa.prenom,pV.ville)
+--		}
+--	}
+--}    
+--avec Personne est une TABLE
+--     Ville est une TABLE
+--     IndexAge est un INDEX
+--Dans requête la table 
+--c)
+explain plan for
+    select a.nom, a.prenom, v.ville
+    from BigAnnuaire a, Ville v
+    where a.cp = v.cp
+    and v.population >= 985000;
+@p3
+
+
+
+
+-- Exercice 5: Autres Requetes 
+-- ===========================
+
+-- voir les requetes sur l'énoncé en ligne
+
+
+
+
+
+
+
+
+-- Exercice 6: Documentation et Requetes sur le catalogue
+-- ======================================================
+COLUMN TABLE_NAME format A20
+SELECT TABLE_NAME, blocks, num_rows 
+FROM user_tables;
+
+
+-- info sur la taille des index
+column table_name format A10
+column index_name format A10
+--
+select table_name, index_name, blevel, distinct_keys, leaf_blocks,
+avg_leaf_blocks_per_key, avg_data_blocks_per_key
+from user_indexes
+where table_name = 'ANNUAIRE';
+
+select table_name, index_name, blevel, distinct_keys, leaf_blocks,
+avg_leaf_blocks_per_key, avg_data_blocks_per_key
+from all_indexes
+where table_name = 'BIGANNUAIRE';
+

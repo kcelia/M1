@@ -1,0 +1,10 @@
+java GeneriqueXHTML "select * from Joueur2" > test.html ajouté
+java Schema JOUEUR
+java GeneriqueXHTML "select * from Joueur2" >> test.html ecrasé
+java Generique "select * from Joueur where annaiss=1972"
+emacs ~/.bash_history 
+mysql -u -root -p
+mysql -u -root -p
+mysql -u -root -localhost
+mysql -u -root localhost
+mysql -h localhost -u roo

@@ -1,0 +1,24 @@
+//methode 1 boucle imbriquée
+  *     
+//    results.first();
+//    results.next();
+//     results2 = lecture2.executeQuery();
+//  out.println("Boucle imbriquée");
+//  while (results2.next()) {
+//     	String sponsorj = results2.getString(3);
+//     	//out.println("en premier " + sponsorj);
+//     	while(results.next()){
+//     		//out.println("d2 " +results.getString(1));
+//     		//out.println(sponsorj.equals(results.getString(1) ));
+//     		if ( sponsorj.equals(results.getString(1) )){
+//     			out.println ( "Joueur " + results2.getString(1) + " sa nationalité " +  results2.getString(2) +", Sponsor "+
+//     		        results.getString(1) + " nationalitéS " + results.getString(2) ) ;
+//     			//results.first();
+//     		}
+//     	}
+// 		results.first();
+//     }
+//     out.println("HERe");
+  //methode 2 prepareStatement
+     
+   //ResultSet resultat = lecture.executeQuery();

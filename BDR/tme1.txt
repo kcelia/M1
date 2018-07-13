@@ -1,0 +1,510 @@
+requete a)
+-----------------------------------------------------------
+| Id  | Operation		    | Name	  | Rows  |
+-----------------------------------------------------------
+|   0 | SELECT STATEMENT	    |		  |  2200 | <= total de tout
+|   1 |  TABLE ACCESS BY INDEX ROWID| BIGANNUAIRE |  2200 |
+|*  2 |   INDEX RANGE SCAN	    | INDEXAGE	  |  2200 |
+----------------------------------------------------------
+
+Commentaire:
+
+(arabre chaque noeud a un seul pere)
+T est ecrit sous le E
+I est ecrit sous le A
+ligne 3: * lire ce qu'il y a en dessou => access age = 18 ce calcule se fait grave a l'index 
+ligne 2: progection sur le nom et le prenom 
+
+1_ grace a l'index on accede d'abord au donné, pour obtenir les rowId des personnes ayant 18 ans 2_ puis our chaquue RoId obtenue on llit le nuplet, lire la persnne, lire la page contenant la personne puis on garde le nom et prenom 
+3_ et on affiche le resultat 
+
+l'operation 0 a un seul fils 
+
+pseudo code:
+
+#oracle procede de cette maniere il affiche le resultat progressivement 
+listRowIds = IndexAge.getRowId(18);
+foreach( r : listRowIds) {	   
+p = Personne.readTple(r);
+affiche(p.prenom,p.nom);
+}
+
+Variante :
+
+resultat.add(p.nom,p.prenom) apres l'iteration 
+afficher le resultat 
+
+definition:
+Objets utilisés :
+Personne est une TABLE
+IndexAge est un INDEX
+
+requete c)
+
+explain plan for
+   select a.nom, a.prenom
+   from BigAnnuaire a
+   where a.age < 70 and (a.cp = 93000 or a.cp = 75000);
+@p3
+
+Rmq:
+index sur age, un index sur le code postal 
+< , = correcte
+dans le cours index sur (age,code) donc ci dessus faux
+
+------------------------------------------------------------
+| Id  | Operation		     | Name	   | Rows  |
+------------------------------------------------------------
+|   0 | SELECT STATEMENT	     |		   |   307 |
+|   1 |  INLIST ITERATOR	     |		   |	   | => for/foreac, 2 et 3 sont à l'interieur 
+|*  2 |   TABLE ACCESS BY INDEX ROWID| BIGANNUAIRE |   307 |
+|*  3 |    INDEX RANGE SCAN	     | INDEXCP	   |   440 |
+------------------------------------------------------------
+
+filtrage sur age (traité sans index ) puis on utilise l'index sur le code postal 
+un index c'est sur une valeur et la on lui donne 2 valeurs, on peut supposer qu'il le fait en deux fois 
+listRowIds = BIGANNUAIRE.filtrer.getRowId"(age","<",70);
+
+arbre:
+0
+|
+1
+|
+2
+|
+3
+pseudo code:
+
+ma version: 
+
+l1 = IndexCp.getRowId(93000)
+l2 = IndexCp.getRowId(75000)
+l3 = l1.union(l2);
+
+for i in l3:
+	p=PERSONNE.readTuple(i)
+	
+	if p.age < 70:
+		fficher(p.prenom,p.nom)
+		
+	
+corriger:
+
+for ( c in(93000, 75000) ) {
+listeRowIds = IndexCp.getRowId(c)
+{
+foreach ( r :listRowIds ){
+	p = PERSONNE.readTuple(r)
+ 	if (p.age > 70) {
+ 	afficher(p.prenom,p.nom)
+ 	}
+ 	}
+}
+
+----------------------------------------------------------------
+| Id  | Operation			 | Name        | Rows  |
+----------------------------------------------------------------
+|   0 | SELECT STATEMENT		 |	       |     1 |
+|*  1 |  TABLE ACCESS BY INDEX ROWID	 | BIGANNUAIRE |     1 |
+|   2 |   BITMAP CONVERSION TO ROWIDS	 |	       |       |
+|   3 |    BITMAP AND			 |	       |       |
+|   4 |     BITMAP CONVERSION FROM ROWIDS|	       |       |
+|*  5 |      INDEX RANGE SCAN		 | INDEXCP     |   220 |
+|   6 |     BITMAP CONVERSION FROM ROWIDS|	       |       |
+|*  7 |      INDEX RANGE SCAN		 | INDEXAGE    |   220 |
+----------------------------------------------------------------
+
+bitmap :
+	
+arbre 
+		0
+		|
+		1*
+		|	
+		2
+		|
+	--------3-------
+	4		6
+	|		|
+	5*(220)		7*(220) 
+	
+	
+	
+Rmp:dans 7* resltat de la jointure entre ceux qui habite a .. et qui ont 20 ans, sur la base il existe plus de 220 personnes qui ont 20 ans
+dans 5* si 10⁻3 et dans 7* 10⁻2 dans 3 on a 10⁻2*10⁻3 = 10⁻5
+	
+1- il fait un filer un le nom like T%
+2- il fait un acces par l'index cp
+3- il fait un acces par l'index age 
+
+
+for ( n in(93000, 75000) ) {
+listeRowIds = IndexCp.getRowId(c)
+{
+foreach ( r :listRowIds ){
+	p = PERSONNE.readTuple(r)
+ 	if (p.age > 70) {
+ 	afficher(p.prenom,p.nom)
+ 	}
+ 	}
+}
+
+
+
+-- c)
+explain plan for
+    select a.nom, a.prenom
+    from BigAnnuaire a
+    where a.cp BETWEEN 50000 AND completer;
+@p4
+
+completer = 70000
+--------------------------------------------------------------------------------
+| Id  | Operation		    | Name	  | Rows  | Bytes | Cost (%CPU)|
+--------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	    |		  | 44484 |   825K| 44590   (1)|
+|   1 |  TABLE ACCESS BY INDEX ROWID| BIGANNUAIRE | 44484 |   825K| 44590   (1)|
+|*  2 |   INDEX RANGE SCAN	    | INDEXCP	  | 44484 |	  |    94   (0)|
+--------------------------------------------------------------------------------
+
+access("A"."CP">=50000 AND "A"."CP"<=70000)
+
+completer = 80000
+--------------------------------------------------------------------------------
+| Id  | Operation		    | Name	  | Rows  | Bytes | Cost (%CPU)|
+--------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	    |		  | 66506 |  1233K| 66663   (1)|
+|   1 |  TABLE ACCESS BY INDEX ROWID| BIGANNUAIRE | 66506 |  1233K| 66663   (1)|
+|*  2 |   INDEX RANGE SCAN	    | INDEXCP	  | 66506 |	  |   140   (0)|
+--------------------------------------------------------------------------------
+
+ access("A"."CP">=50000 AND "A"."CP"<=80000)
+
+
+completer =  90000
+----------------------------------------------------------------------
+| Id  | Operation	  | Name	| Rows	| Bytes | Cost (%CPU)|
+----------------------------------------------------------------------
+|   0 | SELECT STATEMENT  |		| 88528 |  1642K| 70893   (1)|
+|*  1 |  TABLE ACCESS FULL| BIGANNUAIRE | 88528 |  1642K| 70893   (1)|
+----------------------------------------------------------------------
+
+filter("A"."CP">=50000 AND "A"."CP"<=90000)
+ 
+je suppose qu oracle choisit d utiliser l'index si 
+le nombre de ligne Rows retournée est inferieur a Cost
+sinon il choisit un filter 
+
+""nbr page recuperée inferieur au nbr de page qu'on va lire""
+ 
+ 
+ 
+ 
+
+
+exo3:
+
+explain plan for
+   SELECT /*+  index( a IndexAge) */  a.nom, a.prenom ou /*+  no_index( a IndexAge) */
+   FROM BigAnnuaire  WHERE a.age completer;
+@p4
+
+                | Rows  | Bytes | Cost (%CPU)
+"AGE" < 7       | 13333 |   234K| 1336    ----> oracle le choisit car 1336 < 70893 pour 13333 rows  access("A"."AGE"<7)
+"AGE" < 7 	| 13333 |   234K| 70893 
+
+
+age < 80	|   175K|  3085K|   175K  (1)   access("A"."AGE"<80)	
+age < 80	|   175K|  3085K| 70893		filter("A"."AGE"<80) ----> 175K > 70895 oracle le choisit 
+
+
+
+explain plan for
+    select /*+ completer */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+/*+ index(a IndexAge) index(a IndexCp)  */
+					|	2 |    44 |   221 
+1 - filter("A"."AGE"=18)
+2 - access("A"."CP"=75000)
+
+
+/*+ no_index(a IndexAge) no_index(a IndexCp)  */  
+filter("A"."CP"=75000 AND "A"."AGE"=18) 			2 |    44 | 70893
+
+
+/*+ index(a IndexAge) no_index(a IndexCp)  */
+
+1 - filter("A"."CP"=75000)				2 |    44 |  2206  
+2 - access("A"."AGE"=18)
+
+
+ /*+ no_index(a IndexAge) index(a IndexCp)  */ 
+
+ |	2 |    44 |   221 
+
+1 - filter("A"."AGE"=18)
+2 - access("A"."CP"=75000
+
+/*+ index(a IndexAge) no_index(a IndexCp)  */  |	2 |    44 |  2206 
+
+1 - filter("A"."CP"=75000)
+2 - access("A"."AGE"=18)
+
+
+sans rien
+
+|     2 |    44 |    10
+
+
+5 - access("A"."CP"=75000)
+7 - access("A"."AGE"=18)
+
+attention: index(a IndexAge) index(a IndexCp) ne force pas a utilisé les deux, index combine le fait 
+explain plan for
+    select /*+ index_combine( a IndexAge IndexCp )  */  a.nom, a.prenom 
+    from BigAnnuaire a where a.age = 18 and a.cp = 75000;
+@p4
+
+5 - access("A"."CP"=75000)
+7 - access("A"."AGE"=18)
+
+
+
+
+EXO4:
+
+
+-- a) avec le "petit" Annuaire
+explain plan for
+    select a.nom, a.prenom, v.ville
+    from Annuaire a, Ville v
+    where a.cp = v.cp
+    and a.age=18;
+@p3
+
+| Id  | Operation		     | Name	| Rows	|
+---------------------------------------------------------
+|   0 | SELECT STATEMENT	     |		|    20 |
+|*  1 |  HASH JOIN		     |		|    20 |
+|   2 |   TABLE ACCESS BY INDEX ROWID| ANNUAIRE |    20 |
+|*  3 |    INDEX RANGE SCAN	     | INDEXAGE |    20 |
+|   4 |   TABLE ACCESS FULL	     | VILLE	|  1000 |
+
+
+
+
+
+			0
+			1*
+		2		4
+		3*
+
+Rmq:
+en 3* il utilise l'indexAge il selectionne 20 lignes 
+en 1*HashJoin 
+
+
+Pseudo code en uitlisnt 
+	index.GetRowIds(CONDITION)
+	TABLE.getTuple(RowID)
+	TABL.fullScan()
+	m : MAP < cp , (nom,prenom) > en java m : MAP < int , Lisy<string,string>  >
+
+
+
+c'est pour les etapes 2 et 3
+foreach( r: INdexAge.getRowIds(age = 18)):
+	t= annuaire.getTuple(r)
+	ajouter( t.cp , (t.nom, t.prenom)) dans la table de hachage MAP peut s'ecrire 
+	m.put(t.cp , (t.nom, t.prenom ) )  // en vraila liste nom prenom est completé au fur est a mesure donc zsi on veut bien faire on verifie si la clé exitee alors on init ac le premier couple sinon on complete la liste 
+	
+etape 4
+
+foreach ( v : VILLE.fullScan() ) 
+	foreach(p: m.get(v.cp) ) // obtenir les (nom,prenom) de la MAP m
+		afficher(p.nom, p.prenom, v.ville)
+		
+
+	
+
+
+-- b) avec BigAnnuaire
+explain plan for
+    select a.nom, a.prenom, v.ville
+    from BigAnnuaire a, Ville v
+    where a.cp = v.cp
+    and a.age=18;
+@p3
+    
+------------------------------------------------------------
+| Id  | Operation		     | Name	   | Rows  |
+------------------------------------------------------------
+|   0 | SELECT STATEMENT	     |		   |  2200 |
+|*  1 |  HASH JOIN		     |		   |  2200 |
+|   2 |   TABLE ACCESS FULL	     | VILLE	   |  1000 |
+|   3 |   TABLE ACCESS BY INDEX ROWID| BIGANNUAIRE |  2200 |
+|*  4 |    INDEX RANGE SCAN	     | INDEXAGE    |  2200 |
+------------------------------------------------------------
+
+
+   1 - access("A"."CP"="V"."CP")
+   4 - access("A"."AGE"=18)
+   
+   
+   
+			0
+			1
+	fullville2		3
+				4 indexAGe
+				
+			
+				
+				
+foraech ( v: Ville.fullScan() ) 	
+	ajouter(v.cp, v.ville ) dans MAP 
+	
+	
+foeach( r: INDEXAGE.getRows(18))
+	t= ANNUAIRE.getTuple(r)
+	afficher(t.nom,t.prenom,MAP.get(t.cp))			
+				
+				
+				
+attention oracle commence tjrs a gauche 
+
+
+--c)
+explain plan for
+    select a.nom, a.prenom, v.ville
+    from BigAnnuaire a, Ville v
+    where a.cp = v.cp
+    and v.population >= 985000;
+@p3			
+				
+------------------------------------------------------------
+| Id  | Operation		     | Name	   | Rows  |
+------------------------------------------------------------
+|   0 | SELECT STATEMENT	     |		   |  3647 |
+|   1 |  NESTED LOOPS		     |		   |	   |
+|   2 |   NESTED LOOPS		     |		   |  3647 |
+|*  3 |    TABLE ACCESS FULL	     | VILLE	   |	17 |
+|*  4 |    INDEX RANGE SCAN	     | INDEXCP	   |   220 |
+|   5 |   TABLE ACCESS BY INDEX ROWID| BIGANNUAIRE |   220 |
+------------------------------------------------------------				
+				
+				
+					0
+					|
+			----------------1-------
+			|			|
+		--------2--------		5 (tbigAnnuaire BY rowId)
+		|		|
+villeFull	3		4 (IndexCp sur bogANuuaire)
+
+
+1 recuperer toutes les villes boucle cp
+2 on recuperer les row ID dans la bonne ville 
+3 on va lire les rowId dans bigAnnuaire
+
+it 1 sur 3
+it 1 sur 4
+en 5 pas d iteration car pour une personne ya un rowID 
+
+
+--------------------------------------------------------------------------------------------------------
+
+les algorithmes de jointure :
+
+par hachage et nested loops ( != hash, n'utilise pas de MAP attention, c une jointure par boucle imbriquée )
+
+foreach ( v : VILLE.fullSCan() ) # etape 3 
+	if (v.population >= 985000) #etape 3
+		foreach(r : indexCp.getRowIds(v.cp) # ) etape 4  se trouve a l interieur de l etape 2  
+			p = BIGANNUAIRE.getTuple()
+			afficher(p.nom ,  p.prenom, p.v.ville)
+			
+
+// dans les slides par d index 
+// hachage la petite table est stocké dans une map 
+			
+		
+			
+EXO6:
+	
+select table_name, index_name, distinct_keys, leaf_blocks
+from user_indexes;	
+
+TABLE_NAME	     INDEX_NAME     BLEVEL DISTINCT_KEYS LEAF_BLOCKS AVG_LEAF_BLOCKS_PER_KEY
+-------------------- ---------- ---------- ------------- ----------- -----------------------
+AVG_DATA_BLOCKS_PER_KEY
+-----------------------
+ANNUAIRE	     INDEXAGE		 1	     100	   4			   1
+		     19
+
+ANNUAIRE	     INDEXCP		 1	     855	   5			   1
+
+
+leaf block nbr de bloc ou ya les pages contiennent  les pointeurs et en moyenne il a 4 page par age 
+	
+ leaf_blocks/ distinct_keys
+ 
+ 
+ requete 2 ) 
+ 
+    COLUMN TABLE_NAME format A20
+    COLUMN column_name format A20
+    SELECT TABLE_NAME, column_name, utl_raw.cast_to_number(low_value) AS borneInf,  utl_raw.cast_to_number(high_value) AS borneSup, num_distinct, histogram
+    FROM user_tab_cols // decrit le domaine(min,maxnD(R,A) de chaque attribut
+    WHERE data_type = 'NUMBER';
+    
+
+				
+				
+		
+SELECT table_name, num_rows as cardinalite , blocks as pages
+FROM user_tables;	
+				
+	TABLE_NAME	     CARDINALITE      PAGES
+-------------------- ----------- ----------
+VILLE			    1000	  5
+ANNUAIRE		    2000	622
+
+explain plan for
+select * from Annuaire;
+@p4
+
+
+-------------------------------------------------------------------
+| Id  | Operation	  | Name     | Rows  | Bytes | Cost (%CPU)|
+-------------------------------------------------------------------
+|   0 | SELECT STATEMENT  |	     |	2000 |	2988K|	 170   (0)|
+|   1 |  TABLE ACCESS FULL| ANNUAIRE |	2000 |	2988K|	 170   (0)|
+-------------------------------------------------------------------
+
+c = 170 (cout) / 622 ( nbr page ) = 0.27
+
+cout(annuaire) = page(annuaire) * c 
+
+ANNUAIRE a 622 pages Cost 170 
+VIlle a 5 pages 
+j
+c
+f
+
+
+
+
+
+				
+				
+				
+				
+
+
+
+
+
+
+
+

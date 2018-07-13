@@ -1,0 +1,303 @@
+-- NOM: BOURMAUD
+-- Prénom: Alexia
+
+-- NOM: MARCHAL
+-- Prénom: Louise
+
+-- ==========================
+--      TME Jointure
+-- ========================== 
+
+
+-- Préparation
+-- ===========
+
+-- construire la base contenant les tables J, C et F
+@vider
+purge recyclebin;
+@baseJCF
+
+@liste
+
+
+-- schéma des tables
+desc J
+desc C
+desc F
+desc BigJoueur
+
+COLUMN TABLE_NAME format A20
+SELECT TABLE_NAME, blocks, num_rows 
+FROM user_tables;
+
+EXPLAIN plan FOR
+SELECT * FROM F;
+@p4
+
+
+--afficher les cardinalités
+select count(*) as nb_Joueurs from J;
+select count(*) as nb_Clubs from C;
+select count(*) as nb_Finances from F;
+select count(*) as nb_BigJoueurs from BigJoueur;
+
+
+
+
+
+-- =====================
+-- Exercice préparatoire
+-- =====================
+
+explain plan for select * from J;
+@p4
+--J
+--il y a 50 000 n-uplet
+--cout d'acces 68
+
+explain plan for select * from C;
+@p4
+--C
+--il y a 5 000 n-uplet
+--cout d'acces 7
+
+explain plan for select * from F;
+@p4
+--F
+--il y a 5 000 n-uplet
+--cout d'acces 5
+
+explain plan for select * from BigJoueur;
+@p4
+--il y a 50 000 n-uplets
+--cout d'acces 13 798
+
+
+
+-- ============================================
+--    Exercice 1: Jointure entre 2 relations
+-- ============================================
+
+-- Question 1
+--===========
+
+explain plan for
+  select J.licence, C.nom
+  from J, C
+  where J.cnum = C.cnum
+  and salaire >10;
+@p4
+--r1 retourne la licence de chaque joueur ayant un salaire supérieur à 10 et le nom ce leur club
+--   0
+--   1*
+--2     3*
+--
+--MAP<Int,String> map	 
+--foreach( c: C.fullStream ()){
+--	   map.put(c.num , c.nom)
+--}
+----foreach( j: J.fullStream ()){
+--	   if(j.salaire>=10){
+--	   	affichage(j.licence, map.get(j.num))
+--}
+--avec J est une TABLE
+--     C est une TABLE
+--     map est une MAP
+--
+--a)cout(J)=68
+--  cout(C)=7
+--  cout(C join J)= cout(J)+ cout(C) =75 or ici on observe que d'après oracle c'est 76, le 1 de différence est du au cout du cpu  pour construire la MAP
+-- cout(filter(salaire)et J)= 68 car la cout du filtre est nul donc c'est juste le cout de J
+--
+explain plan for
+SELECT /*+ ordered */ 
+FROM C, BigJoueur j
+WHERE j.cnum = c.cnum;
+--b)
+
+-- Question 2)
+-- ===========
+
+explain plan for
+  select J.licence, C.nom
+  from C, J
+  where J.cnum = C.cnum
+  and salaire < 11000;
+@p4
+
+
+-- Question 3)
+-- ===========
+explain plan for
+  select J.licence, C.division
+  from C, J
+  where J.cnum = C.cnum
+  and C.nom in ('PSG', 'Barca');
+@p4
+
+
+-- Question 4)
+-- ===========
+explain plan for
+  select J.licence, C.division
+  from C, J
+  where J.cnum = C.cnum
+  and J.salaire between 10000 and 10001;
+@p4
+
+
+
+
+
+-- ============================================================
+-- EXERCICE 2: Directives USE_NL et USE_HASH pour une jointure
+-- ============================================================
+
+
+
+-- Question 1
+--===========
+
+explain plan for
+  select /*+ USE_NL(J,C) */ J.licence, C.nom
+  from J, C
+  where J.cnum = C.cnum
+  and salaire >10;
+@p4
+
+
+-- Question 2)
+-- ===========
+
+explain plan for
+  select /*+ USE_NL(J,C) */ J.licence, C.nom
+  from C, J
+  where J.cnum = C.cnum
+  and salaire < 11000;
+@p4
+
+
+-- Question 3)
+-- ===========
+
+explain plan for
+  select /*+ USE_HASH(J,C) */ J.licence, C.division
+  from C, J
+  where J.cnum = C.cnum
+  and C.nom in ('PSG', 'Barca');
+@p4
+
+-- Question 4)
+-- ===========
+explain plan for
+  select /*+ USE_HASH(J,C) */ J.licence, C.division
+  from C, J
+  where J.cnum = C.cnum
+  and J.salaire between 10000 and 10001;
+@p4
+
+
+
+
+
+
+-- =====================================================
+--   EXERCICE 3 : Ordre des jointures entre 3 relations 
+-- =====================================================
+
+
+-- ordre1 : CFJ
+explain plan for
+    select /*+ ORDERED */ C.nom, F.budget 
+    from C, F, J
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+-- ordre2 : CJF
+explain plan for
+    select /*+ ORDERED */ C.nom, F.budget 
+    from C, J, F
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+-- ordre3 : FCJ
+explain plan for
+    select /*+ ORDERED */ C.nom, F.budget 
+    from F, C, J
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+-- ordre4 : FJC
+explain plan for
+    select /*+ ORDERED */ C.nom, F.budget 
+    from F, J, C
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+--    where J.cnum = F.cnum and C.cnum = J.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+-- ordre5 : JCF
+explain plan for
+    select /*+ ORDERED */ C.nom, F.budget 
+    from J, C, F
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+-- ordre6 : JFC
+explain plan for
+    select /*+ ORDERED */ C.nom, F.budget 
+    from J, F, C
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+
+-- SANS directive ORDERED
+explain plan for
+    select  C.nom, F.budget 
+    from J, C, F
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+
+
+-- avec directive index(J I_J_salaire)
+
+explain plan for
+    select /*+ index(J I_J_salaire) */  C.nom, F.budget 
+    from J, C, F
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+
+
+-- avec directive  index(C I_C_division)
+
+explain plan for
+    select /*+ index(C I_C_division) */  C.nom, F.budget 
+    from J, C, F
+    where J.cnum = C.cnum and C.cnum = F.cnum and J.cnum = F.cnum
+    and C.division=1 and J.salaire > 59000
+    and J.sport = 'sport1';
+@p4
+

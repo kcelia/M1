@@ -1,0 +1,281 @@
+Less cardinaliés :
+
+				
+select count(*) as nb_Joueurs from J;		-- 50000
+select count(*) as nb_Clubs from C;		--  5000
+select count(*) as nb_Finances from F;		--  5000
+select count(*) as nb_BigJoueurs from BigJoueur;-- 50000
+
+cou( j jointure c )  = cout (j) + cout) )c = 7 +68 = 75 + cout du cpu pour construire la table en memoire = 1 == 46
+cout (j) = page(j) * constante + cout additif pour accedé a la premiere page 
+
+table | pages 
+
+J	244 cout(j) = page(j) * c = 2544 * 0.27 + k = 66 presque 68
+C	20  cout(c) = page(c) * c = 20 * 0.27 = 5.4 = 6  + k
+F	13
+
+
+----------------------------------------------------------------
+| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)|
+----------------------------------------------------------------
+|   0 | SELECT STATEMENT   |	  | 50000 |  1269K|    76   (2)|
+|*  1 |  HASH JOIN	   |	  | 50000 |  1269K|    76   (2)|
+|   2 |   TABLE ACCESS FULL| C	  |  5000 | 60000 |	7   (0)|
+|*  3 |   TABLE ACCESS FULL| J	  | 50000 |   683K|    68   (0)| // filter ou pas c'est le meme cout 
+----------------------------------------------------------------
+
+
+---b
+
+---b
+
+explain plan for
+SELECT /*+ ordered */ *
+FROM C, BigJoueur j
+WHERE j.cnum = c.cnum;
+@p4
+-- cout bigjoueur = 13798 + cout c = 7  == 13805
+
+explain plan for
+SELECT /*+ ordered */ *
+FROM  BigJoueur j, C c
+WHERE j.cnum = c.cnum;
+@p4
+
+-- cout bigjoueur = 13798 + cout c = 7  == 23370
+
+avec un hash join on peut stocker la table plus a gauche si elle est petite donc on gagne en cout 
+si elle est grande la map c a peu pres la taille de la grande table nbr page * taille d une page (8milles octects)
+taille de la table de hachage = table de bigAnnuaire 
+
+
+
+
+suite:
+
+comparaison des requetes 1.d avec 2.a de l exercice 1
+
+2.a:
+
+	
+		
+explain plan for
+   SELECT /*+ USE_HASH(J,C) */ J.licence, C.nom
+   FROM J, C 
+   WHERE J.cnum = C.cnum
+   AND J.salaire < 10006;
+@p4
+			# par hachage #
+---------------------------------------------------------------------------------
+| Id  | Operation		     | Name	   | Rows  | Bytes | Cost (%CPU)|
+---------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	     |		   |	 6 |   156 |	16   (7)|
+|*  1 |  HASH JOIN		     |		   |	 6 |   156 |	16   (7)|
+|   2 |   TABLE ACCESS BY INDEX ROWID| J	   |	 6 |	84 |	 8   (0)|
+|*  3 |    INDEX RANGE SCAN	     | I_J_SALAIRE |	 6 |	   |	 2   (0)|
+|   4 |   TABLE ACCESS FULL	     | C	   |  5000 | 60000 |	 7   (0)|
+---------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - access("J"."CNUM"="C"."CNUM")
+   3 - access("J"."SALAIRE"<10006)
+
+cout = 16
+	
+Rappel : 	jointure par hachage 
+
+	1.1) lire entierement la table de Gauche, access full
+	1.2) creer en memoire une hashmap
+	2.1) lire la table de droite par access full et pour chaque nuplet effectuer la jointure avec etape 1.11
+	
+	
+
+			#nested loop#
+----------------------------------------------------------------------------------
+| Id  | Operation		      | Name	    | Rows  | Bytes | Cost (%CPU)|
+----------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	      | 	    |	  6 |	156 |	 14   (0)|
+|   1 |  NESTED LOOPS		      | 	    |	    |	    |		 |
+|   2 |   NESTED LOOPS		      | 	    |	  6 |	156 |	 14   (0)|
+|   3 |    TABLE ACCESS BY INDEX ROWID| J	    |	  6 |	 84 |	  8   (0)|
+|*  4 |     INDEX RANGE SCAN	      | I_J_SALAIRE |	  6 |	    |	  2   (0)|
+|*  5 |    INDEX UNIQUE SCAN	      | I_C_CNUM    |	  1 |	    |	  0   (0)|
+|   6 |   TABLE ACCESS BY INDEX ROWID | C	    |	  1 |	 12 |	  1   (0)|
+----------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   4 - access("J"."SALAIRE"<10006)
+   5 - access("J"."CNUM"="C"."CNUM")			
+
+cout =14
+	
+	
+	
+	
+	
+1.d:
+
+SELECT J.licence, C.nom
+FROM C, j
+WHERE J.cnum = C.cnum
+AND salaire < 10050;
+
+# l'optimiseur choisit un hash join 
+cout = 60
+
+----------------------------------------------------------------
+| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)|
+----------------------------------------------------------------
+|   0 | SELECT STATEMENT   |	  | 50000 |  1269K|    76   (2)|
+|*  1 |  HASH JOIN	   |	  | 50000 |  1269K|    76   (2)|
+|*  2 |   TABLE ACCESS FULL| J	  | 50000 |   683K|    68   (0)|
+|   3 |   TABLE ACCESS FULL| C	  |  5000 | 60000 |	7   (0)|
+----------------------------------------------------------------
+
+
+   1 - access("J"."CNUM"="C"."CNUM")
+   2 - filter("J"."SALAIRE">10)
+
+
+explain plan for
+SELECT /*+ USE_NL(J,C) */ J.licence, C.nom
+FROM C, j
+WHERE J.cnum = C.cnum
+AND salaire < 10050;
+@p4
+
+
+----------------------------------------------------------------------------------
+| Id  | Operation		      | Name	    | Rows  | Bytes | Cost (%CPU)|
+----------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	      | 	    |	 50 |  1300 |	102   (0)|
+|   1 |  NESTED LOOPS		      | 	    |	    |	    |		 |
+|   2 |   NESTED LOOPS		      | 	    |	 50 |  1300 |	102   (0)|
+|   3 |    TABLE ACCESS BY INDEX ROWID| J	    |	 50 |	700 |	 52   (0)|
+|*  4 |     INDEX RANGE SCAN	      | I_J_SALAIRE |	 50 |	    |	  2   (0)|
+|*  5 |    INDEX UNIQUE SCAN	      | I_C_CNUM    |	  1 |	    |	  0   (0)|
+|   6 |   TABLE ACCESS BY INDEX ROWID | C	    |	  1 |	 12 |	  1   (0)|
+----------------------------------------------------------------------------------
+
+   4 - access("SALAIRE"<10050)
+   5 - access("J"."CNUM"="C"."CNUM")
+   
+   
+cout = 102
+
+//2 nested loop  ne dit rien sur le nbr de boucle 
+
+
+4-3  une premiere boucle 
+
+coute 6 roxIDs ca cout  =2
+(0) cout en pourcentage du cpu 
+on itere pour recuoperer les pointeur (3) get tuple 
+
+
+pour chaque rowId de joueur 4
+on accede au joueur 3
+
+ 
+
+
+			0
+			1
+		2		6
+	3		5
+	4
+	
+
+algorithme :
+
+%etape 4:index range scan  sur Salaire ( salaire < 10006)
+for ( r : IndexSalaire.getRowIds(J.salaire <10006 ) 
+	j = JOUEUR.getTuple(r) %etape 3 TABLE ACCESS BY INDEX ROWID recupere les tuples correspondant 
+	
+	// normalement il ya une autre boucle, INDEX RANGE SCAN mais comme oracle sait qu un joueur a un seul club donc il fait un INDEX UNIQUE SCAN 
+	ci = INdexCNum.getRowIds(j.cnum) %la jointure 
+	c = CLUB.getTUple(ci) % recupere les valeurs associées
+	afficher(j.licence , c.nom ) 
+
+
+
+
+
+
+explain plan for
+  select J.licence, C.division
+  from C, J
+  where J.cnum = C.cnum
+  and C.nom in ('PSG', 'Barca');
+@p4
+
+------------------------------------------------------------------------------
+| Id  | Operation		     | Name	| Rows	| Bytes | Cost (%CPU)|
+------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	     |		|    15 |   360 |    29   (0)|
+|   1 |  NESTED LOOPS		     |		|	|	|	     |
+|   2 |   NESTED LOOPS		     |		|    15 |   360 |    29   (0)|
+|*  3 |    TABLE ACCESS FULL	     | C	|     2 |    30 |     7   (0)|
+|*  4 |    INDEX RANGE SCAN	     | I_J_CNUM |    10 |	|     1   (0)|
+|   5 |   TABLE ACCESS BY INDEX ROWID| J	|    10 |    90 |    11   (0)|
+------------------------------------------------------------------------------
+   3 - filter("C"."NOM"='Barca' OR "C"."NOM"='PSG')
+   4 - access("J"."CNUM"="C"."CNUM")
+   
+		0
+		1
+	2		5
+       3  4*
+	
+--------------------------
+	
+%etape 3, j obtiens les rowIds 	
+
+foreach( r : IndexCnum.filtrer.getRowIds( Cnom in ('PSG', 'Barca')))% sur la table C
+
+		c = CLUB.getTuple(r)		
+		foreach(ji:  INdexJCNum.getRowIds(c.cnum) %la jointure 
+				j = JOUEUR.getTUple(ji) % recupere les valeurs associées
+				afficher(j.licence , c.divison  ) 
+
+--------------------------
+
+
+foreach( r: Club.fullScan())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
